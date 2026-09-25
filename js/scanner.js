@@ -1,659 +1,465 @@
-(function () {
-
-  let lastResults = [];
-  let lastImageData = "";
-
-
-  const defaultStatuses = {
-
-    manufacturer: "ok",
-
-    commodity: "ok",
-
-    quantity: "ok",
-
-    consumer: "ok",
-
-    mrp: "bad",
-
-    date: "warn",
-
-    font: "warn",
-
-    grouping: "ok"
-
-  };
-
-
-  const messages = {
-
-    ok:
-      "Detected in the demo analysis and marked compliant.",
-
-    warn:
-      "Detected, but a readability / presentation review is required.",
-
-    bad:
-      "Not detected or flagged for manual verification in the demo analysis."
-
-  };
-
-
-  function getFileInput() {
-
-    return document.getElementById(
-      "fileInput"
-    );
-
-  }
-
-
-  window.attachScanner = function () {
-
-    getFileInput()
-      .addEventListener(
-        "change",
-        handleFiles
-      );
-
-
-    const dropZone =
-      document.getElementById(
-        "dropZone"
-      );
-
-
-    [
-      "dragenter",
-      "dragover"
-    ].forEach((eventName) => {
-
-      dropZone.addEventListener(
-        eventName,
-        (event) => {
-
-          event.preventDefault();
-
-          dropZone.classList.add(
-            "dragging"
-          );
-
-        }
-      );
-
-    });
-
-
-    [
-      "dragleave",
-      "drop"
-    ].forEach((eventName) => {
-
-      dropZone.addEventListener(
-        eventName,
-        (event) => {
-
-          event.preventDefault();
-
-          dropZone.classList.remove(
-            "dragging"
-          );
-
-        }
-      );
-
-    });
-
-
-    dropZone.addEventListener(
-      "drop",
-      (event) => {
-
-        const files =
-          [
-            ...event.dataTransfer.files
-          ]
-          .filter(
-            file =>
-              file.type.startsWith(
-                "image/"
-              )
-          );
-
-
-        renderFiles(files);
-
-      }
-    );
-
-
-    document
-      .getElementById("scanBtn")
-      .addEventListener(
-        "click",
-        runScan
-      );
-
-  };
-
-
-  function handleFiles(event) {
-
-    renderFiles(
-      [...event.target.files]
-    );
-
-  }
-
-
-  function renderFiles(files) {
-
-    const wrap =
-      document.getElementById(
-        "previewGrid"
-      );
-
-
-    wrap.innerHTML = "";
-
-    lastImageData = "";
-
-
-    files
-      .slice(0, 6)
-      .forEach(
-        (file, index) => {
-
-          const reader =
-            new FileReader();
-
-
-          reader.onload = function () {
-
-            const item =
-              document.createElement(
-                "div"
-              );
-
-
-            item.className =
-              "preview-item";
-
-
-            item.innerHTML = `
-
-              <img
-                src="${reader.result}"
-                alt="Package panel ${index + 1}"
-              />
-
-              <span>
-                Panel ${index + 1}
-              </span>
-
-            `;
-
-
-            wrap.appendChild(item);
-
-
-            if (index === 0) {
-
-              lastImageData =
-                reader.result;
-
-
-              document
-                .getElementById(
-                  "evidenceImage"
-                )
-                .src =
-                reader.result;
-
-            }
-
-          };
-
-
-          reader.readAsDataURL(file);
-
-        }
-      );
-
-
-    if (files.length) {
-
-      window.showToast(
-        `${files.length} image${
-          files.length > 1
-            ? "s"
-            : ""
-        } added for inspection.`
-      );
-
-    }
-
-  }
-
-
-  function runScan() {
-
-    const product =
-      document
-        .getElementById(
-          "productName"
-        )
-        .value
-        .trim() ||
-      "Sample Packaged Commodity";
-
-
-    const base =
-      {
-        ...defaultStatuses
-      };
-
-
-    if (
-      document
-        .getElementById(
-          "productCategory"
-        )
-        .value
-        .includes("Personal")
-    ) {
-
-      base.consumer = "warn";
-
-    }
-
-
-    lastResults =
-      window.LabelGuardRules.map(
-        rule => ({
-
-          ...rule,
-
-          status:
-            base[rule.id],
-
-          note:
-            messages[
-              base[rule.id]
-            ]
-
-        })
-      );
-
-
-    window.__lastScan = {
-
-      id:
-        "LG-" +
-        (
-          20500 +
-          Math.floor(
-            Math.random() * 400
-          )
-        ),
-
-      product,
-
-      category:
-        document
-          .getElementById(
-            "productCategory"
-          )
-          .value,
-
-      channel:
-        document
-          .getElementById(
-            "salesChannel"
-          )
-          .value,
-
-      location:
-        document
-          .getElementById(
-            "location"
-          )
-          .value,
-
-      date:
-        new Date(),
-
-      results:
-        lastResults,
-
-      image:
-        lastImageData || ""
-
-    };
-
-
-    renderResults(
-      window.__lastScan
-    );
-
-
-    window.renderReport(
-      window.__lastScan
-    );
-
-
-    window.showView(
-      "report"
-    );
-
-
-    window.showToast(
-      "Demo compliance analysis completed."
-    );
-
-
-    persistCase(
-      window.__lastScan
-    );
-
-  }
-
-
-  function renderResults(scan) {
-
-    document
-      .querySelectorAll(
-        "#stepper .step"
+const dropzone =
+  document.getElementById(
+    "dropzone"
+  );
+
+
+const fileInput =
+  document.getElementById(
+    "fileInput"
+  );
+
+
+function handleFiles(
+  fileList
+){
+
+  const images =
+    [...fileList]
+
+      .filter(
+        file =>
+          /^image\/(png|jpeg|jpg)$/
+            .test(
+              file.type
+            )
       )
-      .forEach(
-        (step) => {
 
-          step.classList.add(
-            "active"
-          );
-
-        }
+      .slice(
+        0,
+        4
       );
 
 
-    document
-      .getElementById(
-        "analysisSub"
-      )
-      .textContent =
-      `${scan.id} · ${scan.product}`;
+  state.files =
+    images;
 
 
-    const passed =
-      scan.results.filter(
-        result =>
-          result.status === "ok"
-      ).length;
-
-
-    const score =
-      Math.round(
-        (
-          passed /
-          scan.results.length
-        ) *
-        100
-      );
-
-
-    const status =
-      score >= 80
-        ? "ok"
-        : score >= 60
-          ? "warn"
-          : "bad";
-
-
-    const chip =
-      document.getElementById(
-        "analysisStatus"
-      );
-
-
-    chip.className =
-      `status-chip ${status}`;
-
-
-    chip.textContent =
-      status === "ok"
-        ? "Mostly compliant"
-        : status === "warn"
-          ? "Review required"
-          : "Violation found";
-
-
+  const thumbs =
     document.getElementById(
-      "checklist"
-    ).innerHTML =
-
-      scan.results
-        .map(
-          result => `
-
-            <div class="check-item">
-
-              <div
-                class="
-                  check-icon
-                  status-${result.status}
-                "
-              >
-                ${
-                  result.status === "ok"
-                    ? "✓"
-                    : result.status === "warn"
-                      ? "!"
-                      : "×"
-                }
-              </div>
+      "thumbs"
+    );
 
 
-              <div class="check-main">
-
-                <strong>
-                  ${result.title}
-                </strong>
-
-                <span>
-                  ${result.note}
-                </span>
-
-                <span class="rule-code">
-                  ${result.rule}
-                </span>
-
-              </div>
-
-            </div>
-          `
-        )
-        .join("");
+  thumbs.innerHTML =
+    "";
 
 
-    const ringColor =
-      status === "ok"
-        ? "#267752"
-        : status === "warn"
-          ? "#9b7417"
-          : "#b43a3a";
+  images.forEach(
+    file => {
 
-
-    document
-      .getElementById(
-        "scoreRing"
-      )
-      .style.background =
-      `
-        conic-gradient(
-          ${ringColor}
-          ${score * 3.6}deg,
-          #e9edf2
-          ${score * 3.6}deg
-        )
-      `;
-
-
-    document
-      .getElementById(
-        "scoreRing"
-      )
-      .innerHTML = `
-
-        <span>
-          ${score}%
-        </span>
-
-        <small>
-          compliance
-        </small>
-
-      `;
-
-
-    document
-      .getElementById(
-        "scoreTitle"
-      )
-      .textContent =
-      status === "ok"
-        ? "Ready for closure"
-        : status === "warn"
-          ? "Manual review required"
-          : "Violation review required";
-
-
-    document
-      .getElementById(
-        "scoreText"
-      )
-      .textContent =
-      `${passed} of ${
-        scan.results.length
-      } prototype checks passed. Findings must be verified against the physical package and official rule interpretation.`;
-
-
-    if (lastImageData) {
-
-      document
-        .getElementById(
-          "evidencePanel"
-        )
-        .hidden = false;
-
-
-      document
-        .getElementById(
-          "evidenceImage"
-        )
-        .src =
-        lastImageData;
-
-    }
-
-  }
-
-
-  function persistCase(scan) {
-
-    try {
-
-      const existing =
-        JSON.parse(
-          localStorage.getItem(
-            "labelguard_cases"
-          ) || "[]"
+      const url =
+        URL.createObjectURL(
+          file
         );
 
 
-      existing.unshift({
-
-        id:
-          scan.id,
-
-        product:
-          scan.product,
-
-        manufacturer:
-          "Demo manufacturer",
-
-        category:
-          scan.category,
-
-        status:
-          scoreStatus(
-            scan.results
-          ),
-
-        date:
-          scan.date.toISOString(),
-
-        officer:
-          "R. Sharma"
-
-      });
+      const div =
+        document.createElement(
+          "div"
+        );
 
 
-      localStorage.setItem(
-        "labelguard_cases",
-        JSON.stringify(
-          existing.slice(
-            0,
-            50
-          )
+      div.className =
+        "thumb";
+
+
+      div.innerHTML = `
+
+        <img
+          src="${url}"
+          alt="Package image"
+        >
+
+        <span>
+          ✓
+        </span>
+
+      `;
+
+
+      thumbs.appendChild(
+        div
+      );
+
+    }
+  );
+
+
+  document.getElementById(
+    "analyzeBtn"
+  ).disabled =
+    images.length === 0;
+
+
+  if (images.length){
+
+    showToast(
+
+      `
+        ${
+          images.length
+        }
+        package image${
+          images.length > 1
+            ? "s"
+            : ""
+        }
+        ready for analysis.
+      `,
+
+      "Images uploaded"
+
+    );
+
+  }
+
+}
+
+
+function buildMatrix(){
+
+  const rows = [
+
+    [
+      "Product name",
+      "AquaPure Drinking Water",
+      "ok",
+      "Detected"
+    ],
+
+    [
+      "Manufacturer / packer",
+      "AquaPure Foods Pvt. Ltd. · Patna, Bihar",
+      "ok",
+      "Detected"
+    ],
+
+    [
+      "Net quantity",
+      "1 L",
+      "ok",
+      "Detected"
+    ],
+
+    [
+      "MRP",
+      "₹20.00 (inclusive of all taxes)",
+      "warn",
+      "Review"
+    ],
+
+    [
+      "Month / year",
+      "08 / 2026",
+      "ok",
+      "Detected"
+    ],
+
+    [
+      "Consumer care",
+      "1800-000-2026 · care@aquapure.demo",
+      "ok",
+      "Detected"
+    ],
+
+    [
+      "Font / readability",
+      "Estimated 7 px on label crop",
+      "fail",
+      "Check"
+    ],
+
+    [
+      "Placement / visibility",
+      "MRP partly obscured in crop",
+      "fail",
+      "Flag"
+    ]
+
+  ];
+
+
+  document.getElementById(
+    "matrix"
+  ).innerHTML =
+
+    rows
+      .map(
+        row => `
+
+          <div class="matrix-row">
+
+            <div class="label">
+              ${row[0]}
+            </div>
+
+            <div class="value">
+              ${row[1]}
+            </div>
+
+            <span
+              class="
+                matrix-check
+                ${row[2]}
+              "
+            >
+              ${row[3]}
+            </span>
+
+          </div>
+
+        `
+      )
+      .join("");
+
+
+  document.getElementById(
+    "overallBadge"
+  ).textContent =
+    "2 review flags";
+
+
+  document.getElementById(
+    "overallBadge"
+  ).className =
+    "status-badge warning";
+
+}
+
+
+function runScan(){
+
+  document.getElementById(
+    "analyzeBtn"
+  ).disabled =
+    true;
+
+
+  document
+    .querySelector(
+      ".stepper .step:nth-of-type(1)"
+    )
+    ?.classList.remove(
+      "active"
+    );
+
+
+  document.getElementById(
+    "scanState"
+  ).innerHTML = `
+
+    <div class="scan-art">
+
+      <div class="scan-line"></div>
+
+      <div class="scan-corner c1"></div>
+      <div class="scan-corner c2"></div>
+      <div class="scan-corner c3"></div>
+      <div class="scan-corner c4"></div>
+
+      <span>
+        SCANNING
+      </span>
+
+    </div>
+
+
+    <h3>
+      Extracting declarations…
+    </h3>
+
+
+    <p>
+      OCR, field normalization and
+      rule checks are running in the demo engine.
+    </p>
+
+  `;
+
+
+  setTimeout(
+    () => {
+
+      state.inspected =
+        true;
+
+
+      document
+        .querySelector(
+          ".stepper .step:nth-of-type(3)"
         )
+        ?.classList.add(
+          "active"
+        );
+
+
+      document.getElementById(
+        "scanState"
+      ).classList.add(
+        "hidden"
       );
 
-    } catch (error) {
 
-      console.warn(
-        "Could not save case history.",
-        error
+      document.getElementById(
+        "analysisContent"
+      ).classList.remove(
+        "hidden"
+      );
+
+
+      buildMatrix();
+
+
+      document.getElementById(
+        "analyzeBtn"
+      ).disabled =
+        false;
+
+
+      showToast(
+        "Extraction complete. 6 declarations reviewed.",
+        "Analysis complete"
+      );
+
+    },
+
+    1100
+
+  );
+
+}
+
+
+if (
+  dropzone &&
+  fileInput
+){
+
+  [
+    "dragenter",
+    "dragover"
+
+  ].forEach(
+    eventName => {
+
+      dropzone.addEventListener(
+        eventName,
+        event => {
+
+          event.preventDefault();
+
+
+          dropzone.style.borderColor =
+            "#6b69ee";
+
+
+          dropzone.style.background =
+            "#f7f7ff";
+
+        }
       );
 
     }
-
-  }
-
-
-  function scoreStatus(results) {
-
-    const passed =
-      results.filter(
-        result =>
-          result.status === "ok"
-      ).length;
+  );
 
 
-    const score =
-      passed /
-      results.length;
+  [
+    "dragleave",
+    "drop"
+
+  ].forEach(
+    eventName => {
+
+      dropzone.addEventListener(
+        eventName,
+        event => {
+
+          event.preventDefault();
 
 
-    if (score >= 0.8) {
-      return "ok";
+          dropzone.style.borderColor =
+            "";
+
+
+          dropzone.style.background =
+            "";
+
+        }
+      );
+
     }
+  );
 
 
-    if (score >= 0.6) {
-      return "warn";
+  dropzone.addEventListener(
+    "drop",
+    event => {
+
+      handleFiles(
+        event.dataTransfer.files
+      );
+
     }
+  );
 
 
-    return "bad";
+  fileInput.addEventListener(
+    "change",
+    event => {
 
-  }
+      handleFiles(
+        event.target.files
+      );
+
+    }
+  );
+
+}
 
 
-  window.getLastResults =
-    () => lastResults;
+document
+  .getElementById(
+    "analyzeBtn"
+  )
+  .addEventListener(
+    "click",
+    runScan
+  );
 
 
-  window.getLastImage =
-    () => lastImageData;
+document
+  .getElementById(
+    "generateReport"
+  )
+  .addEventListener(
+    "click",
+    () =>
+      generateReport(
+        state.products[0]
+      )
+  );
 
-})();
+
+document
+  .getElementById(
+    "addEvidence"
+  )
+  .addEventListener(
+    "click",
+    () =>
+      showToast(
+        "Evidence slot added to the inspection record.",
+        "Evidence attached"
+      )
+  );
+
+
+window.handleFiles =
+  handleFiles;
+
+window.buildMatrix =
+  buildMatrix;
+
+window.runScan =
+  runScan;
