@@ -1,25 +1,66 @@
-# SIH-2026 — LabelGuard AI
+# SCAN SETU — Legal Metrology Compliance
 
-Smart compliance engine for Legal Metrology Rules, 2011. Uses computer vision & OCR to analyze product packaging, detect missing/non-compliant declarations, check font readability, and generate reports for enforcement teams.
+Frontend prototype for a packaged commodity
+Legal Metrology compliance checking system.
 
-## Frontend Prototype
+## Project Structure
 
-A multi-file frontend prototype for a Legal Metrology packaged commodity compliance workflow.
+frontend/
 
-### Quick Start
+├── index.html
 
-Open `index.html` in a modern browser. No build step required.
+├── css/
+│ ├── style.css
+│ └── responsive.css
 
-### Project Structure
+├── js/
+│ ├── app.js
+│ ├── dashboard.js
+│ ├── data.js
+│ ├── report.js
+│ ├── repository.js
+│ ├── rules.js
+│ └── scanner.js
 
-- `index.html` — Application shell and main views
-- `css/style.css` — Core design system & component styles
-- `css/responsive.css` — Mobile layout & print formatting
-- `js/app.js` — Navigation, theme & app initialization
-- `js/rules.js` — Legal Metrology rule/check definitions
-- `js/scanner.js` — Packaging scan simulation & compliance analysis
-- `js/report.js` — Report generator & PDF exporter
-- `js/repository.js` — Case inspection history & repository filters
-- `js/dashboard.js` — Compliance metrics & dashboard views
-- `js/data.js` — Prototype mock datasets
-- `assets/logo.svg` — LabelGuard AI brand logo
+└── readme.md
+
+## Run
+
+Open `index.html` using VS Code Live Server.
+
+## Brand
+
+SCAN SETU AI
+
+Metrology Compliance
+
+## Main Modules
+
+- Overview
+- New Inspection
+- Product Repository
+- Reports
+- Rule Engine
+
+## Inspection Flow
+
+Upload package image
+↓
+Image preview
+↓
+Demo scan
+↓
+Declaration matrix
+↓
+Compliance review
+↓
+Report generation
+
+## Important
+
+This is a frontend demonstration.
+
+Actual OCR, computer vision, backend rule
+validation, authentication, database storage,
+evidence storage and official legal determination
+must be connected for production use.
