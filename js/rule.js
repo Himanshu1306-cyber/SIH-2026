@@ -1,79 +1,88 @@
-window.LabelGuardRules = [
+function renderRules(){
 
-  {
-    id: "manufacturer",
-    title:
-      "Name & address of manufacturer / packer / importer",
-    rule: "Rule 6(1)(a)"
-  },
-
-  {
-    id: "commodity",
-    title:
-      "Common or generic name of commodity",
-    rule: "Rule 6(1)(b)"
-  },
-
-  {
-    id: "quantity",
-    title:
-      "Net quantity in standard units",
-    rule: "Rule 6(1)(c)"
-  },
-
-  {
-    id: "consumer",
-    title:
-      "Consumer care name, address & contact",
-    rule: "Rule 6(1)(d)"
-  },
-
-  {
-    id: "mrp",
-    title:
-      "Maximum Retail Price, inclusive of applicable taxes",
-    rule: "Rule 6(1)(e)"
-  },
-
-  {
-    id: "date",
-    title:
-      "Month & year of manufacture / packing / import",
-    rule: "Rule 6(1)(f)"
-  },
-
-  {
-    id: "font",
-    title:
-      "Font size / readability check",
-    rule: "Rule 8 (prototype check)"
-  },
-
-  {
-    id: "grouping",
-    title:
-      "Mandatory declarations grouped together",
-    rule: "Rule 9 (prototype check)"
-  }
-
-];
+  const ruleList =
+    document.getElementById(
+      "ruleList"
+    );
 
 
-window.LabelGuardRuleReference = [
+  ruleList.innerHTML =
+    state.rules
+      .map(
+        (r, i) => `
 
-  [
-    "Rule 6",
-    "Mandatory package declarations — prototype reference"
-  ],
+          <div class="rule-card">
 
-  [
-    "Rule 8",
-    "Font-size / presentation check — prototype reference"
-  ],
+            <div class="rule-num">
+              ${r[0]}
+            </div>
 
-  [
-    "Rule 9",
-    "Grouping / placement check — prototype reference"
-  ]
 
-];
+            <div class="rule-copy">
+
+              <strong>
+                ${r[1]}
+              </strong>
+
+              <p>
+                ${r[2]}
+              </p>
+
+            </div>
+
+
+            <span class="rule-type">
+              ${r[3]}
+            </span>
+
+
+            <button
+              class="
+                rule-toggle
+                ${i < 8 ? "on" : ""}
+              "
+              aria-label="Toggle rule"
+            ></button>
+
+          </div>
+
+        `
+      )
+      .join("");
+
+
+  $$(".rule-toggle")
+    .forEach(
+      button => {
+
+        button.addEventListener(
+          "click",
+          () => {
+
+            button.classList.toggle(
+              "on"
+            );
+
+
+            showToast(
+              `Rule ${
+                button.classList.contains(
+                  "on"
+                )
+                  ? "enabled"
+                  : "disabled"
+              } for demo session.`,
+              "Rule updated"
+            );
+
+          }
+        );
+
+      }
+    );
+
+}
+
+
+window.renderRules =
+  renderRules;
