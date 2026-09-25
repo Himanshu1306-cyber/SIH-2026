@@ -1,90 +1,213 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <meta
-    name="description"
-    content="LabelGuard AI — Legal Metrology packaged commodity compliance frontend prototype."
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
   />
 
-  <title>LabelGuard AI — Legal Metrology Compliance</title>
+  <meta
+    name="theme-color"
+    content="#0b1220"
+  />
 
-  <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+  <title>
+    SCAN SETU — Legal Metrology Compliance
+  </title>
 
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/responsive.css" />
+  <!-- CSS -->
+  <link
+    rel="stylesheet"
+    href="css/style.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="css/responsive.css"
+  />
+
 </head>
+
 
 <body>
 
   <div class="app-shell">
 
     <!-- ================= SIDEBAR ================= -->
-    <aside class="sidebar" id="sidebar">
 
-      <div class="brand-block">
+    <aside class="sidebar">
 
-        <div class="brand-row">
-          <img
-            src="assets/logo.svg"
-            class="brand-logo"
-            alt="LabelGuard AI"
-          />
+      <div class="brand">
 
-          <div>
-            <div class="brand-name">LabelGuard AI</div>
-            <div class="brand-tag">Compliance Intelligence</div>
-          </div>
+        <div
+          class="brand-mark"
+          aria-hidden="true"
+        >
+
+          <svg
+            viewBox="0 0 48 48"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+
+            <rect
+              x="4"
+              y="4"
+              width="40"
+              height="40"
+              rx="12"
+              fill="currentColor"
+              opacity=".14"
+            />
+
+            <path
+              d="M14 28.5L20.2 34.5L34.5 16"
+              stroke="currentColor"
+              stroke-width="4.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+
+            <path
+              d="M12 11H36"
+              stroke="currentColor"
+              stroke-width="2.6"
+              stroke-linecap="round"
+              opacity=".65"
+            />
+
+          </svg>
+
         </div>
 
-        <p>
-          Packaged Commodities · Legal Metrology Rules, 2011
-        </p>
+
+        <div>
+
+          <div class="brand-name">
+
+            SCAN SETU
+            <span>AI</span>
+
+          </div>
+
+
+          <div class="brand-sub">
+            Metrology Compliance
+          </div>
+
+        </div>
 
       </div>
 
-      <nav class="nav-list" aria-label="Main navigation">
 
-        <button class="nav-item active" data-view="dashboard">
-          <span class="nav-icon">▦</span>
-          Dashboard
+      <!-- Navigation -->
+
+      <nav
+        class="nav"
+        aria-label="Primary"
+      >
+
+        <button
+          class="nav-item active"
+          data-page="overview"
+        >
+
+          <span class="nav-icon">
+            ⌂
+          </span>
+
+          Overview
+
         </button>
 
-        <button class="nav-item" data-view="scan">
-          <span class="nav-icon">⌗</span>
-          Scan Product
+
+        <button
+          class="nav-item"
+          data-page="inspection"
+        >
+
+          <span class="nav-icon">
+            ⌕
+          </span>
+
+          New Inspection
+
         </button>
 
-        <button class="nav-item" data-view="report">
-          <span class="nav-icon">▤</span>
-          Compliance Report
+
+        <button
+          class="nav-item"
+          data-page="repository"
+        >
+
+          <span class="nav-icon">
+            ▣
+          </span>
+
+          Product Repository
+
         </button>
 
-        <button class="nav-item" data-view="repository">
-          <span class="nav-icon">▱</span>
-          Repository
+
+        <button
+          class="nav-item"
+          data-page="reports"
+        >
+
+          <span class="nav-icon">
+            ▤
+          </span>
+
+          Reports
+
         </button>
 
-        <button class="nav-item" data-view="access">
-          <span class="nav-icon">◎</span>
-          Officer Access
+
+        <button
+          class="nav-item"
+          data-page="rules"
+        >
+
+          <span class="nav-icon">
+            ✓
+          </span>
+
+          Rule Engine
+
         </button>
 
       </nav>
 
+
+      <!-- Sidebar footer -->
+
       <div class="sidebar-footer">
 
-        <div class="user-card">
+        <div class="status-card">
 
-          <div class="avatar">RS</div>
+          <div class="status-dot"></div>
 
           <div>
-            <strong>R. Sharma</strong>
-            <span>Enforcement Officer</span>
+
+            <strong>
+              System healthy
+            </strong>
+
+            <span>
+              All modules operational
+            </span>
+
           </div>
 
+        </div>
+
+
+        <div class="mini-note">
+          Demo build · Frontend only
         </div>
 
       </div>
@@ -93,47 +216,116 @@
 
 
     <!-- ================= MAIN ================= -->
-    <main class="main-content">
+
+    <main class="main">
+
 
       <!-- TOPBAR -->
+
       <header class="topbar">
 
-        <div class="topbar-left">
+        <div class="mobile-brand">
 
-          <button
-            class="icon-button mobile-only"
-            id="menuBtn"
-            aria-label="Open menu"
-          >
-            ☰
-          </button>
+          <div class="brand-mark small">
 
-          <div>
-            <h1 id="pageTitle">
-              Enforcement Dashboard
-            </h1>
+            <svg
+              viewBox="0 0 48 48"
+              fill="none"
+            >
 
-            <p id="pageSubtitle">
-              Legal Metrology (Packaged Commodities) Rules, 2011
-            </p>
+              <path
+                d="M14 28.5L20.2 34.5L34.5 16"
+                stroke="currentColor"
+                stroke-width="4.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+
+            </svg>
+
           </div>
+
+
+          <strong>
+            SCAN SETU AI
+          </strong>
 
         </div>
 
+
+        <div class="topbar-left">
+
+          <div
+            class="eyebrow"
+            id="pageEyebrow"
+          >
+            ENFORCEMENT CONSOLE
+          </div>
+
+
+          <h1 id="pageTitle">
+            Compliance Overview
+          </h1>
+
+        </div>
+
+
         <div class="topbar-actions">
 
-          <span class="system-pill">
-            <span class="pulse"></span>
-            System Active
-          </span>
+          <label class="global-search">
+
+            <span>
+              ⌕
+            </span>
+
+            <input
+              id="globalSearch"
+              placeholder="Search product, report or ID…"
+            />
+
+          </label>
+
 
           <button
-            class="icon-button"
-            id="themeBtn"
-            title="Toggle theme"
-            aria-label="Toggle theme"
+            class="icon-btn"
+            title="Notifications"
+            id="notifyBtn"
           >
-            ◐
+
+            ◔
+
+            <i></i>
+
+          </button>
+
+
+          <button
+            class="profile"
+            id="profileBtn"
+          >
+
+            <span class="avatar">
+              DR
+            </span>
+
+
+            <span class="profile-copy">
+
+              <strong>
+                Demo Inspector
+              </strong>
+
+              <small>
+                Enforcement Officer
+              </small>
+
+            </span>
+
+
+            <span class="chev">
+              ⌄
+            </span>
+
           </button>
 
         </div>
@@ -141,522 +333,1107 @@
       </header>
 
 
-      <!-- ================= DASHBOARD ================= -->
-      <section class="view active" id="view-dashboard">
+      <!-- ================= CONTENT ================= -->
 
-        <div class="hero-row">
-
-          <div>
-
-            <div class="eyebrow">
-              FIELD OPERATIONS
-            </div>
-
-            <h2>
-              Compliance overview
-            </h2>
-
-            <p>
-              Monitor product inspections, declarations,
-              violations and review workload from one workspace.
-            </p>
-
-          </div>
-
-          <button
-            class="btn btn-primary"
-            data-go="scan"
-          >
-            ＋ New inspection
-          </button>
-
-        </div>
+      <div class="content">
 
 
-        <div
-          class="stats-grid"
-          id="statsGrid"
-        ></div>
+        <!-- ==================================================
+             OVERVIEW
+        =================================================== -->
 
+        <section
+          class="page active"
+          id="page-overview"
+        >
 
-        <div class="two-col">
-
-          <!-- CHART -->
-          <div class="panel">
-
-            <div class="panel-head">
-
-              <div>
-
-                <h3>
-                  Scans vs violations
-                </h3>
-
-                <p>
-                  Last 7 days
-                </p>
-
-              </div>
-
-            </div>
-
-            <div
-              class="bar-chart"
-              id="barsChart"
-            ></div>
-
-            <div class="legend">
-
-              <span>
-                <i class="legend-scan"></i>
-                Total scans
-              </span>
-
-              <span>
-                <i class="legend-viol"></i>
-                Violations
-              </span>
-
-            </div>
-
-          </div>
-
-
-          <!-- VIOLATIONS -->
-          <div class="panel">
-
-            <div class="panel-head">
-
-              <div>
-
-                <h3>
-                  Violations by declaration
-                </h3>
-
-                <p>
-                  Flag frequency
-                </p>
-
-              </div>
-
-            </div>
-
-            <div
-              id="violationsList"
-            ></div>
-
-          </div>
-
-        </div>
-
-
-        <!-- RECENT TABLE -->
-        <div class="panel table-panel">
-
-          <div class="panel-head">
+          <div class="hero">
 
             <div>
 
-              <h3>
-                Recent inspections
-              </h3>
+              <span class="pill accent">
+                AI-ASSISTED INSPECTION
+              </span>
+
+
+              <h2>
+
+                Scan a package.
+
+                <span>
+                  Spot compliance gaps.
+                </span>
+
+              </h2>
+
 
               <p>
-                Latest scanned products
+
+                Upload packaging images or product listings
+                and let the rule engine organize declarations,
+                evidence and review status in one place.
+
               </p>
 
+
+              <div class="hero-actions">
+
+                <button
+                  class="btn primary"
+                  data-page="inspection"
+                >
+
+                  ＋ Start New Inspection
+
+                </button>
+
+
+                <button
+                  class="btn ghost"
+                  id="watchDemo"
+                >
+
+                  ▷ View demo flow
+
+                </button>
+
+              </div>
+
             </div>
 
-            <button
-              class="btn btn-secondary btn-sm"
-              data-go="repository"
+
+            <div
+              class="hero-orb"
+              aria-hidden="true"
             >
-              View repository
-            </button>
 
-          </div>
+              <div class="orb-ring r1"></div>
 
+              <div class="orb-ring r2"></div>
 
-          <div class="table-wrap">
-
-            <table>
-
-              <thead>
-
-                <tr>
-                  <th>Scan ID</th>
-                  <th>Product</th>
-                  <th>Manufacturer</th>
-                  <th>Status</th>
-                  <th>Date</th>
-                  <th></th>
-                </tr>
-
-              </thead>
-
-              <tbody id="recentTable"></tbody>
-
-            </table>
-
-          </div>
-
-        </div>
-
-      </section>
+              <div class="orb-ring r3"></div>
 
 
-      <!-- ================= SCAN ================= -->
-      <section
-        class="view"
-        id="view-scan"
-      >
+              <div class="orb-center">
 
-        <div class="hero-row compact">
+                <span>
+                  SCAN
+                </span>
 
-          <div>
+                <strong>
+                  AI
+                </strong>
 
-            <div class="eyebrow">
-              INSPECTION WORKFLOW
+              </div>
+
             </div>
 
-            <h2>
-              Scan packaged commodity
-            </h2>
+          </div>
 
-            <p>
-              Upload package panels, capture product metadata
-              and run the compliance-analysis demo.
-            </p>
+
+          <!-- Stats -->
+
+          <div class="stats-grid">
+
+            <article class="stat-card">
+
+              <div class="stat-icon indigo">
+                ▣
+              </div>
+
+              <div>
+
+                <span>
+                  Products scanned
+                </span>
+
+                <strong id="statScanned">
+                  1,284
+                </strong>
+
+                <small>
+                  +12.8% this month
+                </small>
+
+              </div>
+
+            </article>
+
+
+            <article class="stat-card">
+
+              <div class="stat-icon green">
+                ✓
+              </div>
+
+              <div>
+
+                <span>
+                  Compliant
+                </span>
+
+                <strong id="statCompliant">
+                  1,018
+                </strong>
+
+                <small>
+                  79.3% of reviewed items
+                </small>
+
+              </div>
+
+            </article>
+
+
+            <article class="stat-card">
+
+              <div class="stat-icon red">
+                !
+              </div>
+
+              <div>
+
+                <span>
+                  Violations found
+                </span>
+
+                <strong id="statViolations">
+                  266
+                </strong>
+
+                <small>
+                  84 high-priority flags
+                </small>
+
+              </div>
+
+            </article>
+
+
+            <article class="stat-card">
+
+              <div class="stat-icon amber">
+                ◷
+              </div>
+
+              <div>
+
+                <span>
+                  Pending review
+                </span>
+
+                <strong id="statPending">
+                  37
+                </strong>
+
+                <small>
+                  Needs inspector action
+                </small>
+
+              </div>
+
+            </article>
 
           </div>
 
-          <span class="demo-badge">
-            Frontend demo mode
-          </span>
 
-        </div>
+          <!-- Dashboard panels -->
 
-
-        <!-- STEPPER -->
-        <div
-          class="stepper"
-          id="stepper"
-        >
-
-          <div class="step active">
-            <b>1</b>
-            <span>Upload</span>
-          </div>
-
-          <div class="step">
-            <b>2</b>
-            <span>Analyze</span>
-          </div>
-
-          <div class="step">
-            <b>3</b>
-            <span>Review</span>
-          </div>
-
-          <div class="step">
-            <b>4</b>
-            <span>Report</span>
-          </div>
-
-        </div>
+          <div class="grid-2-1">
 
 
-        <div class="two-col scan-grid">
+            <!-- Recent inspections -->
 
-          <!-- LEFT -->
-          <div>
-
-            <div class="panel">
+            <section class="panel">
 
               <div class="panel-head">
 
                 <div>
 
+                  <span class="section-kicker">
+                    LIVE QUEUE
+                  </span>
+
                   <h3>
-                    Package images
+                    Recent inspections
                   </h3>
 
-                  <p>
-                    Front, back and side panels recommended
-                  </p>
+                </div>
+
+
+                <button
+                  class="text-btn"
+                  data-page="repository"
+                >
+                  View all →
+                </button>
+
+              </div>
+
+
+              <div class="table-wrap">
+
+                <table>
+
+                  <thead>
+
+                    <tr>
+
+                      <th>
+                        Product
+                      </th>
+
+                      <th>
+                        Inspection ID
+                      </th>
+
+                      <th>
+                        Status
+                      </th>
+
+                      <th>
+                        Scanned
+                      </th>
+
+                      <th></th>
+
+                    </tr>
+
+                  </thead>
+
+
+                  <tbody
+                    id="recentTable"
+                  ></tbody>
+
+                </table>
+
+              </div>
+
+            </section>
+
+
+
+            <!-- Compliance mix -->
+
+            <section
+              class="panel distribution-panel"
+            >
+
+              <div class="panel-head">
+
+                <div>
+
+                  <span class="section-kicker">
+                    PORTFOLIO
+                  </span>
+
+                  <h3>
+                    Compliance mix
+                  </h3>
+
+                </div>
+
+
+                <span class="period">
+                  This month ▾
+                </span>
+
+              </div>
+
+
+              <div class="distribution">
+
+                <div class="donut">
+
+                  <div>
+
+                    <strong>
+                      79.3%
+                    </strong>
+
+                    <span>
+                      Compliant
+                    </span>
+
+                  </div>
+
+                </div>
+
+
+                <div class="legend">
+
+                  <div>
+
+                    <span class="legend-dot ok"></span>
+
+                    Compliant
+
+                    <strong>
+                      1,018
+                    </strong>
+
+                  </div>
+
+
+                  <div>
+
+                    <span class="legend-dot fail"></span>
+
+                    Non-compliant
+
+                    <strong>
+                      182
+                    </strong>
+
+                  </div>
+
+
+                  <div>
+
+                    <span class="legend-dot review"></span>
+
+                    Review needed
+
+                    <strong>
+                      84
+                    </strong>
+
+                  </div>
 
                 </div>
 
               </div>
 
 
-              <!-- UPLOAD -->
-              <label
-                class="upload-zone"
-                for="fileInput"
-                id="dropZone"
-              >
-
-                <div class="upload-icon">
-                  ⌁
-                </div>
-
-                <strong>
-                  Drop package images here
-                </strong>
+              <div class="risk-line">
 
                 <span>
-                  or click to browse · JPG, PNG, WEBP
+                  High-risk checks
                 </span>
 
-                <input
-                  id="fileInput"
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  hidden
-                />
-
-              </label>
+                <strong>
+                  84
+                </strong>
 
 
-              <div
-                class="preview-grid"
-                id="previewGrid"
-              ></div>
+                <span class="risk-track">
+
+                  <i style="width:31%"></i>
+
+                </span>
+
+              </div>
+
+            </section>
+
+          </div>
 
 
-              <!-- PRODUCT DETAILS -->
-              <div class="field-grid">
+          <!-- Rule coverage -->
 
-                <label>
+          <section
+            class="panel checks-panel"
+          >
 
-                  <span>
-                    Product name
-                  </span>
+            <div class="panel-head">
 
-                  <input
-                    id="productName"
-                    type="text"
-                    placeholder="e.g. Sunrise Refined Sunflower Oil"
-                  />
+              <div>
 
-                </label>
+                <span class="section-kicker">
+                  RULE COVERAGE
+                </span>
 
-
-                <label>
-
-                  <span>
-                    Category
-                  </span>
-
-                  <select id="productCategory">
-
-                    <option>
-                      Food & Edible Oils
-                    </option>
-
-                    <option>
-                      Personal Care & Cosmetics
-                    </option>
-
-                    <option>
-                      Household & Cleaning
-                    </option>
-
-                    <option>
-                      Stationery & General
-                    </option>
-
-                    <option>
-                      Pharmaceuticals (OTC)
-                    </option>
-
-                  </select>
-
-                </label>
-
-
-                <label>
-
-                  <span>
-                    Sales channel
-                  </span>
-
-                  <select id="salesChannel">
-
-                    <option>
-                      Retail Store
-                    </option>
-
-                    <option>
-                      Supermarket
-                    </option>
-
-                    <option>
-                      E-commerce Listing
-                    </option>
-
-                  </select>
-
-                </label>
-
-
-                <label>
-
-                  <span>
-                    Inspection location
-                  </span>
-
-                  <input
-                    id="location"
-                    type="text"
-                    value="Dhanbad Circle"
-                  />
-
-                </label>
+                <h3>
+                  Automated declaration checks
+                </h3>
 
               </div>
 
 
               <button
-                class="btn btn-primary full-width"
-                id="scanBtn"
+                class="text-btn"
+                data-page="rules"
               >
-                Run Compliance Scan
+                Open rule engine →
               </button>
 
             </div>
 
 
-            <!-- EVIDENCE -->
             <div
-              class="panel evidence-panel"
-              id="evidencePanel"
-              hidden
-            >
+              class="check-grid"
+              id="checkGrid"
+            ></div>
 
-              <div class="panel-head">
+          </section>
 
-                <div>
-
-                  <h3>
-                    Evidence preview
-                  </h3>
-
-                  <p>
-                    Example visual finding overlay
-                  </p>
-
-                </div>
-
-              </div>
+        </section>
 
 
-              <div class="evidence-stage">
 
-                <img
-                  id="evidenceImage"
-                  alt="Inspection evidence"
-                />
+        <!-- ==================================================
+             NEW INSPECTION
+        =================================================== -->
 
-                <div class="evidence-box">
+        <section
+          class="page"
+          id="page-inspection"
+        >
 
-                  <span>
-                    MRP finding
-                  </span>
+          <div class="inspection-header">
 
-                </div>
+            <div>
 
-              </div>
+              <span class="section-kicker">
+                NEW INSPECTION
+              </span>
 
 
-              <p class="tiny-note">
-                In production, bounding boxes and OCR regions
-                should come from the computer-vision/OCR service.
+              <h2>
+                Scan &amp; verify a packaged commodity
+              </h2>
+
+
+              <p>
+
+                Upload clear front/back/side photos,
+                then review extracted declarations before
+                generating the inspection report.
+
               </p>
+
+            </div>
+
+
+            <div class="stepper">
+
+              <div class="step active">
+
+                <b>
+                  1
+                </b>
+
+                <span>
+                  Upload
+                </span>
+
+              </div>
+
+
+              <div class="line"></div>
+
+
+              <div class="step">
+
+                <b>
+                  2
+                </b>
+
+                <span>
+                  Analyze
+                </span>
+
+              </div>
+
+
+              <div class="line"></div>
+
+
+              <div class="step">
+
+                <b>
+                  3
+                </b>
+
+                <span>
+                  Review
+                </span>
+
+              </div>
+
+
+              <div class="line"></div>
+
+
+              <div class="step">
+
+                <b>
+                  4
+                </b>
+
+                <span>
+                  Report
+                </span>
+
+              </div>
 
             </div>
 
           </div>
 
 
-          <!-- RIGHT -->
-          <div>
+          <div class="inspection-layout">
 
-            <!-- ANALYSIS -->
-            <div
-              class="panel"
-              id="analysisPanel"
-            >
 
-              <div class="panel-head">
+            <!-- Upload panel -->
+
+            <section class="panel upload-panel">
+
+              <div class="upload-top">
 
                 <div>
 
-                  <h3>
-                    Analysis result
-                  </h3>
+                  <span class="section-kicker">
+                    SOURCE IMAGES
+                  </span>
 
-                  <p id="analysisSub">
-                    Run a scan to populate extracted declarations.
-                  </p>
+                  <h3>
+                    Package photos
+                  </h3>
 
                 </div>
 
-                <span
-                  id="analysisStatus"
-                  class="status-chip neutral"
-                >
-                  Awaiting scan
+
+                <span class="file-hint">
+                  JPG, PNG · up to 10 MB
                 </span>
 
               </div>
 
 
-              <div
-                id="checklist"
-                class="checklist"
+              <label
+                class="dropzone"
+                id="dropzone"
               >
 
-                <div class="empty-state">
+                <input
+                  type="file"
+                  id="fileInput"
+                  accept="image/png,image/jpeg"
+                  multiple
+                  hidden
+                />
 
-                  <div class="empty-icon">
-                    ◌
-                  </div>
+
+                <div class="upload-glyph">
+                  ⇧
+                </div>
+
+
+                <h3>
+                  Drop package images here
+                </h3>
+
+
+                <p>
+                  or
+                  <u>
+                    browse from device
+                  </u>
+                </p>
+
+
+                <small>
+                  Best results: straight-on,
+                  well-lit label photos
+                </small>
+
+              </label>
+
+
+              <div
+                class="thumbs"
+                id="thumbs"
+              ></div>
+
+
+              <div class="source-tags">
+
+                <span>
+                  Front panel
+                </span>
+
+                <span>
+                  Back panel
+                </span>
+
+                <span>
+                  Side panel
+                </span>
+
+                <span>
+                  MRP area
+                </span>
+
+              </div>
+
+
+              <button
+                class="btn primary full"
+                id="analyzeBtn"
+                disabled
+              >
+
+                Analyze package
+
+                <span>
+                  →
+                </span>
+
+              </button>
+
+            </section>
+
+
+
+            <!-- Analysis panel -->
+
+            <section class="panel analysis-panel">
+
+              <div class="upload-top">
+
+                <div>
+
+                  <span class="section-kicker">
+                    ANALYSIS PREVIEW
+                  </span>
+
+                  <h3>
+                    Declaration matrix
+                  </h3>
+
+                </div>
+
+
+                <span class="confidence">
+
+                  AI confidence
 
                   <strong>
-                    No analysis yet
+                    93%
                   </strong>
 
+                </span>
+
+              </div>
+
+
+              <!-- Waiting state -->
+
+              <div
+                class="scan-state"
+                id="scanState"
+              >
+
+                <div class="scan-art">
+
+                  <div class="scan-line"></div>
+
+                  <div class="scan-corner c1"></div>
+                  <div class="scan-corner c2"></div>
+                  <div class="scan-corner c3"></div>
+                  <div class="scan-corner c4"></div>
+
                   <span>
-                    Upload an image and run the compliance scan.
+                    READY
                   </span>
+
+                </div>
+
+
+                <h3>
+                  Awaiting package scan
+                </h3>
+
+
+                <p>
+                  Upload at least one package image
+                  to start automated extraction.
+                </p>
+
+              </div>
+
+
+              <!-- Analysis content -->
+
+              <div
+                id="analysisContent"
+                class="hidden"
+              >
+
+                <div class="product-strip">
+
+                  <div class="product-icon">
+                    PKG
+                  </div>
+
+
+                  <div>
+
+                    <strong id="productName">
+                      AquaPure Drinking Water
+                    </strong>
+
+                    <span id="productMeta">
+                      Consumer commodity · Demo extraction
+                    </span>
+
+                  </div>
+
+
+                  <span
+                    class="status-badge warning"
+                    id="overallBadge"
+                  >
+                    Review needed
+                  </span>
+
+                </div>
+
+
+                <div
+                  class="matrix"
+                  id="matrix"
+                ></div>
+
+
+                <div class="analysis-actions">
+
+                  <button
+                    class="btn ghost"
+                    id="addEvidence"
+                  >
+                    ＋ Attach evidence
+                  </button>
+
+
+                  <button
+                    class="btn primary"
+                    id="generateReport"
+                  >
+                    Generate report →
+                  </button>
 
                 </div>
 
               </div>
 
+            </section>
+
+          </div>
+
+        </section>
+
+
+
+        <!-- ==================================================
+             REPOSITORY
+        =================================================== -->
+
+        <section
+          class="page"
+          id="page-repository"
+        >
+
+          <div class="page-heading">
+
+            <div>
+
+              <span class="section-kicker">
+                PRODUCT REPOSITORY
+              </span>
+
+
+              <h2>
+                Scanned products &amp; inspection history
+              </h2>
+
+
+              <p>
+
+                Search every inspection,
+                open evidence,
+                and continue pending reviews.
+
+              </p>
+
             </div>
 
 
-            <!-- SCORE -->
-            <div
-              class="panel score-panel"
-              id="scorePanel"
+            <button
+              class="btn primary"
+              data-page="inspection"
             >
 
-              <div class="score-layout">
+              ＋ New inspection
 
-                <div
-                  class="score-ring"
-                  id="scoreRing"
-                >
+            </button>
 
-                  <span>—</span>
+          </div>
+
+
+          <section class="panel">
+
+            <div class="repo-toolbar">
+
+              <label class="field-search">
+
+                <span>
+                  ⌕
+                </span>
+
+
+                <input
+                  id="repoSearch"
+                  placeholder="Search by product, ID or category"
+                />
+
+              </label>
+
+
+              <select id="statusFilter">
+
+                <option value="all">
+                  All statuses
+                </option>
+
+                <option value="Compliant">
+                  Compliant
+                </option>
+
+                <option value="Non-compliant">
+                  Non-compliant
+                </option>
+
+                <option value="Review needed">
+                  Review needed
+                </option>
+
+              </select>
+
+
+              <select id="categoryFilter">
+
+                <option value="all">
+                  All categories
+                </option>
+
+                <option value="Beverages">
+                  Beverages
+                </option>
+
+                <option value="Grocery">
+                  Grocery
+                </option>
+
+                <option value="Personal Care">
+                  Personal Care
+                </option>
+
+                <option value="Household">
+                  Household
+                </option>
+
+              </select>
+
+            </div>
+
+
+            <div class="table-wrap">
+
+              <table class="repo-table">
+
+                <thead>
+
+                  <tr>
+
+                    <th>
+                      Product
+                    </th>
+
+                    <th>
+                      Category
+                    </th>
+
+                    <th>
+                      Inspection ID
+                    </th>
+
+                    <th>
+                      Compliance
+                    </th>
+
+                    <th>
+                      Flags
+                    </th>
+
+                    <th>
+                      Inspector
+                    </th>
+
+                    <th>
+                      Updated
+                    </th>
+
+                    <th></th>
+
+                  </tr>
+
+                </thead>
+
+
+                <tbody
+                  id="repoTable"
+                ></tbody>
+
+              </table>
+
+            </div>
+
+          </section>
+
+        </section>
+
+
+
+        <!-- ==================================================
+             REPORTS
+        =================================================== -->
+
+        <section
+          class="page"
+          id="page-reports"
+        >
+
+          <div class="page-heading">
+
+            <div>
+
+              <span class="section-kicker">
+                REPORT CENTER
+              </span>
+
+
+              <h2>
+                Compliance reports
+              </h2>
+
+
+              <p>
+
+                Generate inspector-ready summaries
+                with declarations, violations and evidence.
+
+              </p>
+
+            </div>
+
+
+            <button
+              class="btn primary"
+              id="newReportBtn"
+            >
+
+              ＋ Generate report
+
+            </button>
+
+          </div>
+
+
+          <div
+            class="report-grid"
+            id="reportGrid"
+          ></div>
+
+        </section>
+
+
+
+        <!-- ==================================================
+             RULE ENGINE
+        =================================================== -->
+
+        <section
+          class="page"
+          id="page-rules"
+        >
+
+          <div class="page-heading">
+
+            <div>
+
+              <span class="section-kicker">
+                RULE ENGINE
+              </span>
+
+
+              <h2>
+                Declaration checks
+              </h2>
+
+
+              <p>
+
+                Modular checks designed to map
+                extracted package data to configured
+                Legal Metrology validation rules.
+
+              </p>
+
+            </div>
+
+
+            <span class="engine-status">
+
+              <i></i>
+
+              Engine v1.4 · Demo
+
+            </span>
+
+          </div>
+
+
+          <div class="rule-layout">
+
+
+            <section
+              class="panel rule-list"
+              id="ruleList"
+            ></section>
+
+
+            <aside
+              class="panel rule-detail"
+            >
+
+              <span class="section-kicker">
+                VALIDATION PIPELINE
+              </span>
+
+
+              <h3>
+                From pixels to compliance
+              </h3>
+
+
+              <div class="pipeline">
+
+
+                <div>
+
+                  <b>
+                    01
+                  </b>
+
+                  <span>
+                    Image intake
+                  </span>
 
                   <small>
-                    score
+                    Quality + perspective check
                   </small>
 
                 </div>
@@ -664,474 +1441,282 @@
 
                 <div>
 
-                  <div class="eyebrow">
-                    COMPLIANCE SCORE
-                  </div>
+                  <b>
+                    02
+                  </b>
 
-                  <h3 id="scoreTitle">
-                    Not calculated
-                  </h3>
+                  <span>
+                    OCR extraction
+                  </span>
 
-                  <p id="scoreText">
-                    The score will be calculated after
-                    the demo analysis completes.
-                  </p>
+                  <small>
+                    Text + numbers + symbols
+                  </small>
+
+                </div>
+
+
+                <div>
+
+                  <b>
+                    03
+                  </b>
+
+                  <span>
+                    Field normalization
+                  </span>
+
+                  <small>
+                    Units, dates, currency
+                  </small>
+
+                </div>
+
+
+                <div>
+
+                  <b>
+                    04
+                  </b>
+
+                  <span>
+                    Rule validation
+                  </span>
+
+                  <small>
+                    Completeness + format + placement
+                  </small>
+
+                </div>
+
+
+                <div>
+
+                  <b>
+                    05
+                  </b>
+
+                  <span>
+                    Evidence pack
+                  </span>
+
+                  <small>
+                    Findings + images + report
+                  </small>
 
                 </div>
 
               </div>
 
-            </div>
+            </aside>
 
           </div>
 
-        </div>
+        </section>
 
-      </section>
-
-
-      <!-- ================= REPORT ================= -->
-      <section
-        class="view"
-        id="view-report"
-      >
-
-        <div class="hero-row compact">
-
-          <div>
-
-            <div class="eyebrow">
-              CASE OUTPUT
-            </div>
-
-            <h2>
-              Compliance report
-            </h2>
-
-            <p>
-              Review findings, applicable rules and evidence
-              before exporting.
-            </p>
-
-          </div>
-
-
-          <div class="button-row">
-
-            <button
-              class="btn btn-secondary"
-              id="printBtn"
-            >
-              Print / Save PDF
-            </button>
-
-            <button
-              class="btn btn-primary"
-              id="docBtn"
-            >
-              Export Editable
-            </button>
-
-          </div>
-
-        </div>
-
-
-        <div class="report-layout">
-
-          <!-- REPORT -->
-          <div
-            class="report-card"
-            id="reportCard"
-          >
-
-            <div class="report-header">
-
-              <div>
-
-                <span class="report-kicker">
-                  LABELGUARD AI
-                </span>
-
-                <h3 id="reportProduct">
-                  No product scanned
-                </h3>
-
-                <p id="reportMeta">
-                  Run a scan to generate a case report.
-                </p>
-
-              </div>
-
-
-              <div
-                class="report-score"
-                id="reportScore"
-              >
-                —
-              </div>
-
-            </div>
-
-
-            <div
-              class="report-summary"
-              id="reportSummary"
-            ></div>
-
-
-            <div class="table-wrap">
-
-              <table>
-
-                <thead>
-
-                  <tr>
-                    <th>Declaration / Check</th>
-                    <th>Rule</th>
-                    <th>Status</th>
-                    <th>Finding</th>
-                  </tr>
-
-                </thead>
-
-                <tbody id="reportTable"></tbody>
-
-              </table>
-
-            </div>
-
-
-            <div class="signature-row">
-
-              <div>
-
-                <strong>
-                  Officer
-                </strong>
-
-                <span>
-                  R. Sharma · Enforcement Officer
-                </span>
-
-              </div>
-
-
-              <div>
-
-                <strong>
-                  Case ID
-                </strong>
-
-                <span id="reportCaseId">
-                  —
-                </span>
-
-              </div>
-
-
-              <div>
-
-                <strong>
-                  Generated
-                </strong>
-
-                <span id="reportGenerated">
-                  —
-                </span>
-
-              </div>
-
-            </div>
-
-          </div>
-
-
-          <!-- RULES -->
-          <aside class="panel rules-panel">
-
-            <div class="panel-head">
-
-              <div>
-
-                <h3>
-                  Applicable rule checks
-                </h3>
-
-                <p>
-                  Prototype rule reference
-                </p>
-
-              </div>
-
-            </div>
-
-
-            <div id="rulesReference"></div>
-
-          </aside>
-
-        </div>
-
-      </section>
-
-
-      <!-- ================= REPOSITORY ================= -->
-      <section
-        class="view"
-        id="view-repository"
-      >
-
-        <div class="hero-row compact">
-
-          <div>
-
-            <div class="eyebrow">
-              INSPECTION HISTORY
-            </div>
-
-            <h2>
-              Product repository
-            </h2>
-
-            <p>
-              Search previously scanned products and open
-              their latest case summary.
-            </p>
-
-          </div>
-
-        </div>
-
-
-        <div class="panel">
-
-          <div class="search-row">
-
-            <input
-              id="repoSearch"
-              type="search"
-              placeholder="Search product, manufacturer, scan ID or category…"
-            />
-
-            <div
-              class="filter-row"
-              id="filterRow"
-            ></div>
-
-          </div>
-
-
-          <div class="table-wrap">
-
-            <table>
-
-              <thead>
-
-                <tr>
-                  <th>Scan ID</th>
-                  <th>Product</th>
-                  <th>Manufacturer</th>
-                  <th>Category</th>
-                  <th>Status</th>
-                  <th>Date</th>
-                  <th>Officer</th>
-                  <th></th>
-                </tr>
-
-              </thead>
-
-              <tbody id="repoTable"></tbody>
-
-            </table>
-
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- ================= ACCESS ================= -->
-      <section
-        class="view"
-        id="view-access"
-      >
-
-        <div class="hero-row compact">
-
-          <div>
-
-            <div class="eyebrow">
-              GOVERNANCE
-            </div>
-
-            <h2>
-              Officer access
-            </h2>
-
-            <p>
-              Role-aware permissions and secure-sign-in
-              interface for enforcement teams.
-            </p>
-
-          </div>
-
-        </div>
-
-
-        <div class="two-col">
-
-          <!-- ROLES -->
-          <div class="panel">
-
-            <div class="panel-head">
-
-              <div>
-
-                <h3>
-                  Role-based access
-                </h3>
-
-                <p>
-                  Prototype permission matrix
-                </p>
-
-              </div>
-
-            </div>
-
-
-            <div class="table-wrap">
-
-              <table>
-
-                <thead>
-
-                  <tr>
-                    <th>Role</th>
-                    <th>Permissions</th>
-                    <th>Users</th>
-                  </tr>
-
-                </thead>
-
-                <tbody id="rolesTable"></tbody>
-
-              </table>
-
-            </div>
-
-          </div>
-
-
-          <!-- AUTH -->
-          <div class="panel auth-panel">
-
-            <div class="panel-head">
-
-              <div>
-
-                <h3>
-                  Secure sign-in
-                </h3>
-
-                <p>
-                  Frontend interface only
-                </p>
-
-              </div>
-
-            </div>
-
-
-            <label>
-
-              <span>
-                Officer ID
-              </span>
-
-              <input
-                id="officerId"
-                placeholder="e.g. LM-0421"
-              />
-
-            </label>
-
-
-            <label>
-
-              <span>
-                Password
-              </span>
-
-              <input
-                type="password"
-                placeholder="••••••••"
-              />
-
-            </label>
-
-
-            <label>
-
-              <span>
-                OTP
-              </span>
-
-              <input
-                id="otp"
-                placeholder="6-digit OTP"
-              />
-
-            </label>
-
-
-            <button
-              class="btn btn-primary full-width"
-              id="signInBtn"
-            >
-              Sign In Securely
-            </button>
-
-
-            <div
-              class="auth-note"
-              id="authNote"
-            >
-              Production authentication should use department
-              identity, server-side sessions and audit logging.
-            </div>
-
-          </div>
-
-        </div>
-
-      </section>
+      </div>
 
     </main>
 
   </div>
 
 
-  <!-- TOAST -->
+  <!-- =======================================================
+       TOAST
+  ======================================================== -->
+
   <div
     class="toast"
     id="toast"
-    role="status"
-    aria-live="polite"
-  ></div>
+  >
+
+    <span>
+      ✓
+    </span>
+
+    <div>
+
+      <strong>
+        Done
+      </strong>
+
+      <small id="toastText">
+        Action completed.
+      </small>
+
+    </div>
+
+  </div>
 
 
-  <!-- ================= JS ================= -->
+
+  <!-- =======================================================
+       PRODUCT DETAIL MODAL
+  ======================================================== -->
+
+  <div
+    class="modal-backdrop"
+    id="detailModal"
+    aria-hidden="true"
+  >
+
+    <div class="modal">
+
+      <button
+        class="modal-close"
+        data-close="detailModal"
+      >
+        ×
+      </button>
+
+
+      <div
+        id="modalBody"
+      ></div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =======================================================
+       DEMO FLOW MODAL
+  ======================================================== -->
+
+  <div
+    class="modal-backdrop"
+    id="demoModal"
+    aria-hidden="true"
+  >
+
+    <div class="modal demo-modal">
+
+      <button
+        class="modal-close"
+        data-close="demoModal"
+      >
+        ×
+      </button>
+
+
+      <span class="section-kicker">
+        DEMO FLOW
+      </span>
+
+
+      <h2>
+        See the inspection journey
+      </h2>
+
+
+      <div class="demo-track">
+
+
+        <div>
+
+          <b>
+            1
+          </b>
+
+          <strong>
+            Upload
+          </strong>
+
+          <span>
+            Label images
+          </span>
+
+        </div>
+
+
+        <div>
+
+          <b>
+            2
+          </b>
+
+          <strong>
+            Extract
+          </strong>
+
+          <span>
+            Declarations
+          </span>
+
+        </div>
+
+
+        <div>
+
+          <b>
+            3
+          </b>
+
+          <strong>
+            Validate
+          </strong>
+
+          <span>
+            Rule checks
+          </span>
+
+        </div>
+
+
+        <div>
+
+          <b>
+            4
+          </b>
+
+          <strong>
+            Report
+          </strong>
+
+          <span>
+            Evidence pack
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <button
+        class="btn primary"
+        data-close="demoModal"
+        data-page="inspection"
+      >
+
+        Start the demo →
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =======================================================
+       JAVASCRIPT
+  ======================================================== -->
 
   <script src="js/data.js"></script>
+
   <script src="js/rules.js"></script>
+
   <script src="js/dashboard.js"></script>
-  <script src="js/scanner.js"></script>
+
   <script src="js/report.js"></script>
+
   <script src="js/repository.js"></script>
+
+  <script src="js/scanner.js"></script>
+
   <script src="js/app.js"></script>
 
 </body>
+
 </html>
