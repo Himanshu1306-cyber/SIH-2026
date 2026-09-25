@@ -1,220 +1,179 @@
-(function () {
+function renderRecent(){
 
-  const D = window.LabelGuardData;
-
-
-  function statusLabel(status) {
-
-    if (status === "ok") {
-      return "Compliant";
-    }
-
-    if (status === "bad") {
-      return "Violation";
-    }
-
-    return "Partial";
-  }
+  const table =
+    document.getElementById(
+      "recentTable"
+    );
 
 
-  function makeRow(row) {
-
-    return `
-      <tr>
-
-        <td>
-          <strong>${row[0]}</strong>
-        </td>
-
-        <td>
-          ${row[1]}
-        </td>
-
-        <td>
-          ${row[2]}
-        </td>
-
-        <td>
-
-          <span class="status-chip ${row[4]}">
-            ${statusLabel(row[4])}
-          </span>
-
-        </td>
-
-        <td>
-          ${row[5]}
-        </td>
-
-        <td>
-
-          <button
-            class="btn btn-secondary btn-sm"
-            data-open-case="${row[0]}"
-          >
-            Open
-          </button>
-
-        </td>
-
-      </tr>
-    `;
-  }
-
-
-  window.renderDashboard = function () {
-
-    const total = 2847;
-    const compliant = 2190;
-    const flagged = 657;
-    const pending = 34;
-
-
-    document.getElementById("statsGrid").innerHTML = [
-
-      [
-        "Products scanned",
-        total,
-        "▲ 128 this week",
-        "delta-up"
-      ],
-
-      [
-        "Compliant",
-        compliant,
-        "76.9% pass rate",
-        "delta-up"
-      ],
-
-      [
-        "Violations flagged",
-        flagged,
-        "▲ 6.2% vs last month",
-        "delta-down"
-      ],
-
-      [
-        "Reports pending review",
-        pending,
-        "Avg. 1.4 days to close",
-        ""
-      ]
-
-    ]
-
+  table.innerHTML =
+    state.products
+      .slice(0, 5)
       .map(
-        (item) => `
+        (p, i) => `
 
-          <div class="stat-card">
+          <tr
+            data-product-index="${i}"
+          >
 
-            <div class="stat-label">
-              ${item[0]}
-            </div>
+            <td>
 
-            <div class="stat-value">
-              ${item[1].toLocaleString()}
-            </div>
+              <div class="product-cell">
 
-            <div class="stat-delta ${item[3]}">
-              ${item[2]}
-            </div>
+                <div class="product-thumb">
 
-          </div>
+                  ${p.category
+                    .slice(0, 3)
+                    .toUpperCase()}
+
+                </div>
+
+
+                <div>
+
+                  <strong>
+                    ${p.name}
+                  </strong>
+
+                  <span>
+                    ${p.category}
+                  </span>
+
+                </div>
+
+              </div>
+
+            </td>
+
+
+            <td>
+              ${p.id}
+            </td>
+
+
+            <td>
+              ${badge(p.status)}
+            </td>
+
+
+            <td>
+              ${p.updated}
+            </td>
+
+
+            <td>
+
+              <button
+                class="action-link"
+                data-action="open"
+                data-index="${i}"
+              >
+                Open
+              </button>
+
+            </td>
+
+          </tr>
+
         `
       )
       .join("");
 
-
-    const max =
-      Math.max(...D.dashboard.scans);
+}
 
 
-    document.getElementById("barsChart").innerHTML =
-      D.dashboard.days
-        .map(
-          (day, i) => `
+function renderChecks(){
 
-            <div
-              style="
-                flex:1;
-                display:flex;
-                flex-direction:column;
-                align-items:center;
-              "
-            >
+  const names = [
 
-              <div class="bar-group">
+    [
+      "⌗",
+      "Declaration presence",
+      "All mandatory fields",
+      "92%"
+    ],
 
-                <div
-                  class="bar scan"
-                  style="
-                    height:
-                    ${(D.dashboard.scans[i] / max) * 145}px
-                  "
-                ></div>
+    [
+      "Aa",
+      "Typography",
+      "Readability + size",
+      "88%"
+    ],
 
-                <div
-                  class="bar violation"
-                  style="
-                    height:
-                    ${(D.dashboard.violations[i] / max) * 145}px
-                  "
-                ></div>
+    [
+      "₹",
+      "MRP format",
+      "Price + visibility",
+      "96%"
+    ],
 
+    [
+      "◫",
+      "Placement",
+      "Expected label region",
+      "91%"
+    ]
+
+  ];
+
+
+  document.getElementById(
+    "checkGrid"
+  ).innerHTML =
+
+    names
+      .map(
+        n => `
+
+          <div class="check-card">
+
+            <div class="check-top">
+
+              <div class="check-icon">
+                ${n[0]}
               </div>
 
-              <div class="bar-label">
-                ${day}
-              </div>
+              <span
+                class="
+                  score
+                  ${
+                    Number(
+                      n[3].replace(
+                        "%",
+                        ""
+                      )
+                    ) > 94
+                      ? "good"
+                      : "warn"
+                  }
+                "
+              >
+                ${n[3]}
+              </span>
 
             </div>
-          `
-        )
-        .join("");
 
 
-    document.getElementById("violationsList").innerHTML =
-      D.violationTypes
-        .map(
-          (item) => `
-
-            <div class="viol-row">
-
-              <div class="viol-name">
-                ${item[0]}
-              </div>
-
-              <div class="viol-count ${item[2]}">
-                ${item[1]}
-              </div>
-
-            </div>
-          `
-        )
-        .join("");
+            <strong>
+              ${n[1]}
+            </strong>
 
 
-    document.getElementById("recentTable").innerHTML =
-      D.repo.slice(0, 5)
-        .map(makeRow)
-        .join("");
-  };
+            <span>
+              ${n[2]}
+            </span>
+
+          </div>
+
+        `
+      )
+      .join("");
+
+}
 
 
-  document.addEventListener("click", function (event) {
+window.renderRecent =
+  renderRecent;
 
-    const button =
-      event.target.closest("[data-open-case]");
-
-    if (!button) {
-      return;
-    }
-
-    window.openRepositoryCase(
-      button.dataset.openCase
-    );
-
-  });
-
-
-})();
+window.renderChecks =
+  renderChecks;
