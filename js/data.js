@@ -1,192 +1,296 @@
-window.LabelGuardData = {
+const state = {
 
-  dashboard: {
+  currentPage: "overview",
 
-    days: [
-      "Mon",
-      "Tue",
-      "Wed",
-      "Thu",
-      "Fri",
-      "Sat",
-      "Sun"
-    ],
+  files: [],
 
-    scans: [
-      340,
-      410,
-      388,
-      455,
-      402,
-      300,
-      552
-    ],
-
-    violations: [
-      78,
-      95,
-      80,
-      120,
-      88,
-      60,
-      136
-    ]
-
-  },
+  inspected: false,
 
 
-  violationTypes: [
+  products: [
 
-    [
-      "MRP declaration issue",
-      182,
-      "bad"
-    ],
+    {
+      name: "AquaPure Drinking Water",
+      category: "Beverages",
+      id: "LM-2026-00821",
+      status: "Review needed",
+      flags: 3,
+      inspector: "D. Raj",
+      updated: "25 Sep 2026",
+      net: "1 L",
+      mrp: "₹20.00"
+    },
 
-    [
-      "Font size / readability",
-      149,
-      "warn"
-    ],
+    {
+      name: "DailyHarvest Basmati Rice",
+      category: "Grocery",
+      id: "LM-2026-00820",
+      status: "Compliant",
+      flags: 0,
+      inspector: "A. Kumar",
+      updated: "25 Sep 2026",
+      net: "5 kg",
+      mrp: "₹640.00"
+    },
 
-    [
-      "Consumer care details",
-      121,
-      "bad"
-    ],
+    {
+      name: "FreshGlow Face Wash",
+      category: "Personal Care",
+      id: "LM-2026-00817",
+      status: "Non-compliant",
+      flags: 4,
+      inspector: "R. Singh",
+      updated: "24 Sep 2026",
+      net: "100 ml",
+      mrp: "₹145.00"
+    },
 
-    [
-      "Net quantity unit",
-      96,
-      "warn"
-    ],
+    {
+      name: "HomeCare Floor Cleaner",
+      category: "Household",
+      id: "LM-2026-00812",
+      status: "Compliant",
+      flags: 0,
+      inspector: "S. Das",
+      updated: "24 Sep 2026",
+      net: "1 L",
+      mrp: "₹110.00"
+    },
 
-    [
-      "Month / year declaration",
-      68,
-      "bad"
-    ],
+    {
+      name: "NutriBite Oats",
+      category: "Grocery",
+      id: "LM-2026-00808",
+      status: "Review needed",
+      flags: 2,
+      inspector: "M. Patel",
+      updated: "23 Sep 2026",
+      net: "500 g",
+      mrp: "₹99.00"
+    },
 
-    [
-      "Declarations grouping",
-      41,
-      "warn"
-    ]
-
-  ],
-
-
-  repo: [
-
-    [
-      "LG-20481",
-      "Sunrise Refined Sunflower Oil, 1L",
-      "Sunrise Agro Foods Pvt. Ltd.",
-      "Food & Edible Oils",
-      "ok",
-      "24 Sep 2026",
-      "R. Sharma"
-    ],
-
-    [
-      "LG-20480",
-      "GlowFresh Herbal Face Wash, 100g",
-      "GlowFresh Cosmetics Ltd.",
-      "Personal Care & Cosmetics",
-      "bad",
-      "24 Sep 2026",
-      "A. Verma"
-    ],
-
-    [
-      "LG-20479",
-      "CleanMax Floor Cleaner, 500ml",
-      "CleanMax Chemicals",
-      "Household & Cleaning",
-      "warn",
-      "23 Sep 2026",
-      "R. Sharma"
-    ],
-
-    [
-      "LG-20478",
-      "Nova Gel Pen Pack of 5",
-      "Nova Stationery Co.",
-      "Stationery & General",
-      "ok",
-      "23 Sep 2026",
-      "S. Iyer"
-    ],
-
-    [
-      "LG-20477",
-      "Wellcure Cough Syrup 100ml",
-      "Wellcure Pharma",
-      "Pharmaceuticals (OTC)",
-      "bad",
-      "22 Sep 2026",
-      "A. Verma"
-    ],
-
-    [
-      "LG-20476",
-      "Daily Fresh Toned Milk, 500ml",
-      "Daily Fresh Dairy Ltd.",
-      "Food & Edible Oils",
-      "ok",
-      "22 Sep 2026",
-      "S. Iyer"
-    ],
-
-    [
-      "LG-20475",
-      "Shine White Detergent Powder, 1kg",
-      "Shine White Industries",
-      "Household & Cleaning",
-      "warn",
-      "21 Sep 2026",
-      "R. Sharma"
-    ],
-
-    [
-      "LG-20474",
-      "PureGlow Talcum Powder, 200g",
-      "PureGlow Cosmetics",
-      "Personal Care & Cosmetics",
-      "bad",
-      "21 Sep 2026",
-      "A. Verma"
-    ]
+    {
+      name: "PureSip Fruit Drink",
+      category: "Beverages",
+      id: "LM-2026-00801",
+      status: "Non-compliant",
+      flags: 5,
+      inspector: "D. Raj",
+      updated: "22 Sep 2026",
+      net: "750 ml",
+      mrp: "₹75.00"
+    }
 
   ],
 
 
-  roles: [
+  reports: [
+
+    {
+      title: "AquaPure — Inspection Report",
+      id: "REP-2026-0418",
+      status: "Draft",
+      meta: "6 declarations · 3 flags",
+      date: "25 Sep 2026"
+    },
+
+    {
+      title: "FreshGlow Face Wash — Violation Summary",
+      id: "REP-2026-0414",
+      status: "Final",
+      meta: "7 declarations · 4 flags",
+      date: "24 Sep 2026"
+    },
+
+    {
+      title: "DailyHarvest Basmati Rice — Compliance",
+      id: "REP-2026-0411",
+      status: "Final",
+      meta: "7 declarations · 0 flags",
+      date: "24 Sep 2026"
+    },
+
+    {
+      title: "Monthly Enforcement Snapshot — September",
+      id: "REP-2026-0402",
+      status: "Final",
+      meta: "128 inspections · 266 flags",
+      date: "23 Sep 2026"
+    }
+
+  ],
+
+
+  rules: [
 
     [
-      "Enforcement Officer",
-      "Scan, generate & export reports, view assigned history",
-      "142"
+      "01",
+      "Manufacturer / packer / importer details",
+      "Presence + formatting",
+      "Identity"
     ],
 
     [
-      "Circle Supervisor",
-      "Review flagged cases, reassign, approve closure",
-      "26"
+      "02",
+      "Common / generic product name",
+      "Presence + readability",
+      "Declaration"
     ],
 
     [
-      "Legal Metrology Controller",
-      "Full dashboard access, analytics and policy exports",
-      "8"
+      "03",
+      "Net quantity / standard unit",
+      "Presence + unit consistency",
+      "Quantity"
     ],
 
     [
-      "Auditor (Read-only)",
-      "View reports & repository; no edit rights",
-      "15"
+      "04",
+      "Maximum Retail Price (MRP)",
+      "Presence + prescribed format",
+      "Price"
+    ],
+
+    [
+      "05",
+      "Month & year of manufacture / packing / import",
+      "Presence + date pattern",
+      "Date"
+    ],
+
+    [
+      "06",
+      "Consumer care contact details",
+      "Presence + readability",
+      "Consumer"
+    ],
+
+    [
+      "07",
+      "Mandatory declaration placement",
+      "Region + visibility",
+      "Layout"
+    ],
+
+    [
+      "08",
+      "Font size & readability",
+      "Pixel height + contrast",
+      "Typography"
+    ],
+
+    [
+      "09",
+      "Misleading / non-standard representation",
+      "Pattern + rule checks",
+      "Risk"
     ]
 
   ]
 
 };
+
+
+const $ =
+  (
+    selector,
+    root = document
+  ) =>
+    root.querySelector(selector);
+
+
+const $$ =
+  (
+    selector,
+    root = document
+  ) =>
+    [
+      ...root.querySelectorAll(selector)
+    ];
+
+
+function showToast(
+  text,
+  title = "Done"
+){
+
+  const toast =
+    document.getElementById(
+      "toast"
+    );
+
+  if (!toast) return;
+
+
+  const toastText =
+    document.getElementById(
+      "toastText"
+    );
+
+  if (toastText){
+    toastText.textContent =
+      text;
+  }
+
+
+  const strong =
+    toast.querySelector(
+      "strong"
+    );
+
+  if (strong){
+    strong.textContent =
+      title;
+  }
+
+
+  toast.classList.add(
+    "show"
+  );
+
+
+  clearTimeout(
+    showToast.t
+  );
+
+
+  showToast.t =
+    setTimeout(
+      () =>
+        toast.classList.remove(
+          "show"
+        ),
+      3000
+    );
+
+}
+
+
+function badge(
+  status
+){
+
+  const c =
+    status === "Compliant"
+      ? "ok"
+      : status === "Non-compliant"
+        ? "fail"
+        : "warning";
+
+
+  return `
+    <span
+      class="status-badge ${c}"
+    >
+      ${status}
+    </span>
+  `;
+
+}
+
+
+window.showToast =
+  showToast;
+
+window.badge =
+  badge;
