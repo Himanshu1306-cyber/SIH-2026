@@ -1,438 +1,525 @@
-(function () {
+function renderReports(){
+
+  const grid =
+    document.getElementById(
+      "reportGrid"
+    );
 
 
-  function badge(status) {
+  grid.innerHTML =
+    state.reports
+      .map(
+        (r, i) => `
 
-    return `
-      <span class="status-chip ${status}">
-        ${
-          status === "ok"
-            ? "Compliant"
-            : status === "warn"
-              ? "Review"
-              : "Violation"
-        }
-      </span>
-    `;
+          <article
+            class="report-card"
+          >
 
-  }
+            <div class="report-top">
+
+              <div class="report-file">
+                PDF
+              </div>
 
 
-  function escapeHTML(value) {
+              ${
+                r.status === "Final"
 
-    return String(value).replace(
-      /[&<>"']/g,
+                  ? `
+                    <span class="status-badge ok">
+                      Final
+                    </span>
+                  `
 
-      function (character) {
+                  : `
+                    <span class="status-badge warning">
+                      Draft
+                    </span>
+                  `
+              }
 
-        return {
+            </div>
 
-          "&": "&amp;",
-          "<": "&lt;",
-          ">": "&gt;",
-          '"': "&quot;",
-          "'": "&#039;"
 
-        }[character];
+            <h3>
+              ${r.title}
+            </h3>
 
+
+            <p>
+              ${r.id}
+            </p>
+
+
+            <div class="report-meta">
+
+              <span>
+                ${r.meta}
+              </span>
+
+              <span>
+                •
+              </span>
+
+              <span>
+                ${r.date}
+              </span>
+
+            </div>
+
+
+            <div class="report-actions">
+
+              <button
+                class="btn"
+                onclick="downloadReport(${i})"
+              >
+                Export
+              </button>
+
+            </div>
+
+          </article>
+
+        `
+      )
+      .join("");
+
+}
+
+
+function generateReport(
+  product
+){
+
+  const report = {
+
+    title:
+      `${product.name} — Inspection Report`,
+
+    id:
+      `REP-2026-${
+        Math.floor(
+          420 +
+          Math.random() *
+          80
+        )
+      }`,
+
+    status:
+      "Draft",
+
+    meta:
+      `${
+        Math.max(
+          6,
+          product.flags + 5
+        )
+      } declarations · ${
+        product.flags
+      } flags`,
+
+    date:
+      "25 Sep 2026"
+
+  };
+
+
+  state.reports.unshift(
+    report
+  );
+
+
+  renderReports();
+
+
+  showToast(
+    "Digital report created. Open Report Center to export.",
+    "Report generated"
+  );
+
+
+  go(
+    "reports"
+  );
+
+}
+
+
+function downloadReport(
+  index
+){
+
+  const report =
+    state.reports[index];
+
+
+  const content = `
+
+SCAN SETU AI — COMPLIANCE REPORT
+
+Report:
+${report.title}
+
+Report ID:
+${report.id}
+
+Status:
+${report.status}
+
+Generated:
+${report.date}
+
+Summary:
+${report.meta}
+
+
+DEMO NOTE
+
+This is a frontend demonstration report.
+Actual OCR, legal rule validation and official
+inspection workflow must be connected to your
+backend/rule engine.
+
+  `;
+
+
+  const blob =
+    new Blob(
+      [content],
+      {
+        type:
+          "text/plain"
       }
     );
 
-  }
 
+  const link =
+    document.createElement(
+      "a"
+    );
 
-  window.renderReport =
-    function (scan) {
 
-      if (!scan) {
-        return;
-      }
+  link.href =
+    URL.createObjectURL(
+      blob
+    );
 
 
-      const passed =
-        scan.results.filter(
-          item =>
-            item.status === "ok"
-        ).length;
+  link.download =
+    `${report.id}.txt`;
 
 
-      const warnings =
-        scan.results.filter(
-          item =>
-            item.status === "warn"
-        ).length;
+  link.click();
 
 
-      const violations =
-        scan.results.filter(
-          item =>
-            item.status === "bad"
-        ).length;
+  URL.revokeObjectURL(
+    link.href
+  );
 
 
-      const score =
-        Math.round(
-          (
-            passed /
-            scan.results.length
-          ) *
-          100
-        );
+  showToast(
+    "Demo report exported as a text file.",
+    "Export complete"
+  );
 
+}
 
-      document.getElementById(
-        "reportProduct"
-      ).textContent =
-        scan.product;
 
+function openProduct(
+  index
+){
 
-      document.getElementById(
-        "reportMeta"
-      ).textContent =
-        `${scan.id} · ${scan.category} · ${scan.channel} · ${scan.location}`;
+  const product =
+    state.products[index];
 
 
-      document.getElementById(
-        "reportScore"
-      ).textContent =
-        `${score}%`;
+  const findings = [
 
+    [
+      "ok",
+      "Product identity",
+      "Product name is detectable in the source image."
+    ],
 
-      document.getElementById(
-        "reportSummary"
-      ).innerHTML = `
+    [
+      "ok",
+      "Net quantity",
+      "A numeric quantity and unit were detected."
+    ],
 
-        <div class="summary-box">
+    [
 
-          <strong>
-            ${passed}
-          </strong>
+      product.status === "Compliant"
+        ? "ok"
+        : "fail",
 
-          <span>
-            Passed checks
-          </span>
+      "MRP declaration",
 
-        </div>
+      product.status === "Compliant"
 
+        ? "MRP text is visible in the demo record."
 
-        <div class="summary-box">
+        : "MRP region needs closer review for formatting / visibility."
 
-          <strong>
-            ${warnings}
-          </strong>
+    ],
 
-          <span>
-            Review flags
-          </span>
+    [
 
-        </div>
+      product.flags > 2
+        ? "fail"
+        : "warn",
 
+      "Typography",
 
-        <div class="summary-box">
+      "Estimated label text size should be verified against the applicable rule configuration."
 
-          <strong>
-            ${violations}
-          </strong>
+    ]
 
-          <span>
-            Violations
-          </span>
+  ];
 
-        </div>
 
-      `;
+  document.getElementById(
+    "modalBody"
+  ).innerHTML = `
 
+    <div class="detail-head">
 
-      document.getElementById(
-        "reportTable"
-      ).innerHTML =
+      <div class="product-icon">
 
-        scan.results
-          .map(
-            result => `
+        ${product.category
+          .slice(0,3)
+          .toUpperCase()}
 
-              <tr>
+      </div>
 
-                <td>
-                  ${escapeHTML(
-                    result.title
-                  )}
-                </td>
 
-                <td>
-                  <code>
-                    ${escapeHTML(
-                      result.rule
-                    )}
-                  </code>
-                </td>
-
-                <td>
-                  ${badge(
-                    result.status
-                  )}
-                </td>
-
-                <td>
-                  ${escapeHTML(
-                    result.note
-                  )}
-                </td>
-
-              </tr>
-
-            `
-          )
-          .join("");
-
-
-      document.getElementById(
-        "reportCaseId"
-      ).textContent =
-        scan.id;
-
-
-      document.getElementById(
-        "reportGenerated"
-      ).textContent =
-        scan.date.toLocaleString(
-          "en-IN"
-        );
-
-
-      document.getElementById(
-        "rulesReference"
-      ).innerHTML =
-
-        window.LabelGuardRuleReference
-          .map(
-            rule => `
-
-              <div class="rule-ref">
-
-                <b>
-                  ${rule[0]}
-                </b>
-
-                <span>
-                  ${rule[1]}
-                </span>
-
-              </div>
-
-            `
-          )
-          .join("");
-
-    };
-
-
-  window.attachReport =
-    function () {
-
-      document
-        .getElementById(
-          "printBtn"
-        )
-        .addEventListener(
-          "click",
-          function () {
-
-            window.showView(
-              "report"
-            );
-
-            setTimeout(
-              () =>
-                window.print(),
-              50
-            );
-
-          }
-        );
-
-
-      document
-        .getElementById(
-          "docBtn"
-        )
-        .addEventListener(
-          "click",
-          exportEditable
-        );
-
-    };
-
-
-  function exportEditable() {
-
-    const scan =
-      window.__lastScan;
-
-
-    if (!scan) {
-
-      window.showToast(
-        "Run a scan first."
-      );
-
-      return;
-
-    }
-
-
-    const html = `
-
-      <html>
-
-      <head>
-
-        <meta charset="UTF-8">
-
-        <title>
-          ${escapeHTML(scan.id)}
-          Compliance Report
-        </title>
-
-      </head>
-
-      <body>
-
-        <h1>
-          LabelGuard AI — Compliance Report
-        </h1>
+      <div>
 
         <h2>
-          ${escapeHTML(
-            scan.product
-          )}
+          ${product.name}
         </h2>
 
         <p>
-          ${escapeHTML(scan.id)}
-          |
-          ${escapeHTML(scan.category)}
-          |
-          ${escapeHTML(scan.channel)}
-          |
-          ${escapeHTML(scan.location)}
+          ${product.id}
+          ·
+          ${product.category}
+          ·
+          last updated
+          ${product.updated}
         </p>
 
-        <table
-          border="1"
-          cellpadding="7"
-          cellspacing="0"
-        >
-
-          <tr>
-
-            <th>
-              Declaration / Check
-            </th>
-
-            <th>
-              Rule
-            </th>
-
-            <th>
-              Status
-            </th>
-
-            <th>
-              Finding
-            </th>
-
-          </tr>
+      </div>
 
 
-          ${scan.results
-            .map(
-              result => `
+      ${badge(product.status)}
 
-                <tr>
-
-                  <td>
-                    ${escapeHTML(
-                      result.title
-                    )}
-                  </td>
-
-                  <td>
-                    ${escapeHTML(
-                      result.rule
-                    )}
-                  </td>
-
-                  <td>
-                    ${escapeHTML(
-                      result.status
-                    )}
-                  </td>
-
-                  <td>
-                    ${escapeHTML(
-                      result.note
-                    )}
-                  </td>
-
-                </tr>
-
-              `
-            )
-            .join("")}
-
-        </table>
+    </div>
 
 
-        <p>
-          Officer: R. Sharma
-        </p>
+    <div class="detail-stats">
 
-      </body>
+      <div class="detail-stat">
 
-      </html>
+        <span>
+          Net quantity
+        </span>
 
-    `;
+        <strong>
+          ${product.net}
+        </strong>
 
-
-    const blob =
-      new Blob(
-        [html],
-        {
-          type:
-            "application/msword"
-        }
-      );
+      </div>
 
 
-    const link =
-      document.createElement(
-        "a"
-      );
+      <div class="detail-stat">
+
+        <span>
+          MRP
+        </span>
+
+        <strong>
+          ${product.mrp}
+        </strong>
+
+      </div>
 
 
-    link.href =
-      URL.createObjectURL(
-        blob
-      );
+      <div class="detail-stat">
+
+        <span>
+          Flags
+        </span>
+
+        <strong>
+          ${product.flags}
+        </strong>
+
+      </div>
+
+    </div>
 
 
-    link.download =
-      `${scan.id}_Compliance_Report.doc`;
+    <div style="margin-top:18px">
+
+      <span class="section-kicker">
+        FINDINGS
+      </span>
 
 
-    link.click();
+      ${findings
+        .map(
+          finding => `
+
+            <div
+              class="
+                finding
+                ${finding[0]}
+              "
+            >
+
+              <b>
+
+                ${
+                  finding[0] === "ok"
+                    ? "✓"
+                    : finding[0] === "fail"
+                      ? "!"
+                      : "~"
+                }
+
+              </b>
 
 
-    URL.revokeObjectURL(
-      link.href
+              <div>
+
+                <strong>
+                  ${finding[1]}
+                </strong>
+
+                <p>
+                  ${finding[2]}
+                </p>
+
+              </div>
+
+            </div>
+
+          `
+        )
+        .join("")}
+
+    </div>
+
+
+    <div
+      style="
+        display:flex;
+        justify-content:flex-end;
+        gap:8px;
+        margin-top:15px
+      "
+    >
+
+      <button
+        class="btn"
+        onclick="window.print()"
+      >
+        Print
+      </button>
+
+
+      <button
+        class="btn primary"
+        onclick="
+          showToast(
+            'Evidence review opened for ${product.id}.',
+            'Review started'
+          );
+          closeModal('detailModal')
+        "
+      >
+        Start review →
+      </button>
+
+    </div>
+
+  `;
+
+
+  openModal(
+    "detailModal"
+  );
+
+}
+
+
+function openModal(
+  id
+){
+
+  const modal =
+    document.getElementById(
+      id
     );
 
 
-    window.showToast(
-      "Editable report downloaded."
+  if (!modal) return;
+
+
+  modal.classList.add(
+    "open"
+  );
+
+
+  modal.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+}
+
+
+function closeModal(
+  id
+){
+
+  const modal =
+    document.getElementById(
+      id
     );
 
-  }
 
-})();
+  if (!modal) return;
+
+
+  modal.classList.remove(
+    "open"
+  );
+
+
+  modal.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+}
+
+
+window.renderReports =
+  renderReports;
+
+window.generateReport =
+  generateReport;
+
+window.downloadReport =
+  downloadReport;
+
+window.openProduct =
+  openProduct;
+
+window.openModal =
+  openModal;
+
+window.closeModal =
+  closeModal;
