@@ -1,425 +1,214 @@
-(function () {
+function renderRepo(){
 
-  let filter = "all";
-
-
-  function allData() {
-
-    let base = [
-      ...window.LabelGuardData.repo
-    ];
+  const search =
+    (
+      document.getElementById(
+        "repoSearch"
+      )?.value || ""
+    ).toLowerCase();
 
 
-    try {
-
-      const saved =
-        JSON.parse(
-          localStorage.getItem(
-            "labelguard_cases"
-          ) || "[]"
-        );
+  const status =
+    document.getElementById(
+      "statusFilter"
+    )?.value || "all";
 
 
-      base = [
-        ...saved,
-        ...base
-      ];
-
-    } catch (error) {
-
-      console.warn(
-        "Could not load local history.",
-        error
-      );
-
-    }
+  const category =
+    document.getElementById(
+      "categoryFilter"
+    )?.value || "all";
 
 
-    return base;
+  const rows =
+    state.products
 
-  }
-
-
-  function statusLabel(status) {
-
-    if (status === "ok") {
-      return "Compliant";
-    }
-
-    if (status === "bad") {
-      return "Violation";
-    }
-
-    return "Partial";
-
-  }
-
-
-  function formatDate(dateValue) {
-
-    const date =
-      new Date(dateValue);
-
-
-    if (
-      Number.isNaN(
-        date.getTime()
+      .map(
+        (product, index) => ({
+          ...product,
+          index
+        })
       )
-    ) {
-      return dateValue;
-    }
+
+      .filter(
+        product => {
+
+          const text =
+            `
+              ${product.name}
+              ${product.id}
+              ${product.category}
+            `
+            .toLowerCase();
 
 
-    return date.toLocaleDateString(
-      "en-IN",
-      {
-        day: "2-digit",
-        month: "short",
-        year: "numeric"
-      }
-    );
-
-  }
-
-
-  window.renderRepository =
-    function () {
-
-      const query =
-        (
-          document
-            .getElementById(
-              "repoSearch"
-            )
-            .value || ""
-        )
-        .toLowerCase();
-
-
-      const rows =
-        allData().filter(
-          (row) => {
-
-            const text =
-              row
-                .join(" ")
-                .toLowerCase();
-
-
-            const queryMatch =
-              !query ||
-              text.includes(query);
-
-
-            const filterMatch =
-              filter === "all" ||
-              row[4] === filter;
-
-
-            return (
-              queryMatch &&
-              filterMatch
+          const searchMatch =
+            !search ||
+            text.includes(
+              search
             );
 
-          }
-        );
+
+          const statusMatch =
+            status === "all" ||
+            product.status ===
+              status;
 
 
-      document.getElementById(
-        "repoTable"
-      ).innerHTML =
+          const categoryMatch =
+            category === "all" ||
+            product.category ===
+              category;
 
-        rows.length
 
-          ? rows
-              .map(
-                row => `
+          return (
+            searchMatch &&
+            statusMatch &&
+            categoryMatch
+          );
 
-                  <tr>
+        }
+      );
 
-                    <td>
-                      <code>
-                        ${row[0]}
-                      </code>
-                    </td>
 
-                    <td>
+  document.getElementById(
+    "repoTable"
+  ).innerHTML =
+
+    rows.length
+
+      ? rows
+          .map(
+            product => `
+
+              <tr
+                data-product-index="${product.index}"
+              >
+
+                <td>
+
+                  <div class="product-cell">
+
+                    <div class="product-thumb">
+
+                      ${product.category
+                        .slice(0,3)
+                        .toUpperCase()}
+
+                    </div>
+
+
+                    <div>
+
                       <strong>
-                        ${row[1]}
+                        ${product.name}
                       </strong>
-                    </td>
 
-                    <td>
-                      ${row[2]}
-                    </td>
-
-                    <td>
-                      ${row[3]}
-                    </td>
-
-                    <td>
-
-                      <span
-                        class="
-                          status-chip
-                          ${row[4]}
-                        "
-                      >
-                        ${statusLabel(
-                          row[4]
-                        )}
+                      <span>
+                        ${product.net}
+                        ·
+                        ${product.mrp}
                       </span>
 
-                    </td>
-
-                    <td>
-                      ${formatDate(
-                        row[5]
-                      )}
-                    </td>
-
-                    <td>
-                      ${row[6]}
-                    </td>
-
-                    <td>
-
-                      <button
-                        class="
-                          btn
-                          btn-secondary
-                          btn-sm
-                        "
-                        data-repo-open="${row[0]}"
-                      >
-                        Open
-                      </button>
-
-                    </td>
-
-                  </tr>
-
-                `
-              )
-              .join("")
-
-          : `
-
-              <tr>
-
-                <td colspan="8">
-
-                  <div class="no-results">
-
-                    No matching
-                    inspections found.
+                    </div>
 
                   </div>
 
                 </td>
 
-              </tr>
 
-            `;
-
-    };
-
-
-  window.attachRepository =
-    function () {
-
-      document
-        .getElementById(
-          "repoSearch"
-        )
-        .addEventListener(
-          "input",
-          window.renderRepository
-        );
+                <td>
+                  ${product.category}
+                </td>
 
 
-      const filters = [
-
-        [
-          "all",
-          "All"
-        ],
-
-        [
-          "ok",
-          "Compliant"
-        ],
-
-        [
-          "warn",
-          "Partial"
-        ],
-
-        [
-          "bad",
-          "Violation"
-        ]
-
-      ];
+                <td>
+                  ${product.id}
+                </td>
 
 
-      document.getElementById(
-        "filterRow"
-      ).innerHTML =
+                <td>
+                  ${badge(product.status)}
+                </td>
 
-        filters
-          .map(
-            filterItem => `
 
-              <button
-                class="
-                  filter-chip
+                <td>
+
                   ${
-                    filterItem[0] === "all"
-                      ? "active"
-                      : ""
+                    product.flags
+
+                      ? `
+                        <span class="status-badge fail">
+                          ${product.flags}
+                          flag${
+                            product.flags > 1
+                              ? "s"
+                              : ""
+                          }
+                        </span>
+                      `
+
+                      : `
+                        <span class="status-badge ok">
+                          0 flags
+                        </span>
+                      `
                   }
-                "
-                data-filter="${filterItem[0]}"
-              >
-                ${filterItem[1]}
-              </button>
+
+                </td>
+
+
+                <td>
+                  ${product.inspector}
+                </td>
+
+
+                <td>
+                  ${product.updated}
+                </td>
+
+
+                <td>
+
+                  <button
+                    class="action-link"
+                    data-action="open"
+                    data-index="${product.index}"
+                  >
+                    View
+                  </button>
+
+                </td>
+
+              </tr>
 
             `
           )
-          .join("");
+          .join("")
+
+      : `
+
+          <tr>
+
+            <td
+              colspan="8"
+              style="
+                text-align:center;
+                padding:32px;
+                color:#9099a7
+              "
+            >
+
+              No matching products.
+
+            </td>
+
+          </tr>
+
+        `;
+
+}
 
 
-      document
-        .querySelectorAll(
-          "[data-filter]"
-        )
-        .forEach(
-          button => {
-
-            button.addEventListener(
-              "click",
-              function () {
-
-                document
-                  .querySelectorAll(
-                    "[data-filter]"
-                  )
-                  .forEach(
-                    item =>
-                      item.classList.remove(
-                        "active"
-                      )
-                  );
-
-
-                button.classList.add(
-                  "active"
-                );
-
-
-                filter =
-                  button.dataset.filter;
-
-
-                window.renderRepository();
-
-              }
-            );
-
-          }
-        );
-
-
-      window.renderRepository();
-
-    };
-
-
-  window.openRepositoryCase =
-    function (id) {
-
-      const row =
-        allData().find(
-          item =>
-            item[0] === id
-        );
-
-
-      if (!row) {
-
-        window.showToast(
-          "Case not found."
-        );
-
-        return;
-
-      }
-
-
-      if (
-        window.__lastScan &&
-        window.__lastScan.id === id
-      ) {
-
-        window.renderReport(
-          window.__lastScan
-        );
-
-      } else {
-
-        window.renderReport({
-
-          id: row[0],
-
-          product: row[1],
-
-          category: row[3],
-
-          channel: "—",
-
-          location: "—",
-
-          date:
-            new Date(row[5]),
-
-          results:
-            window.LabelGuardRules
-              .map(
-                rule => ({
-
-                  title:
-                    rule.title,
-
-                  rule:
-                    rule.rule,
-
-                  status:
-                    row[4] === "ok"
-                      ? "ok"
-                      : row[4] === "bad"
-                        ? "bad"
-                        : "warn",
-
-                  note:
-                    row[4] === "ok"
-                      ? "Repository case marked compliant."
-                      : row[4] === "bad"
-                        ? "Repository case contains a violation flag."
-                        : "Repository case requires review."
-
-                })
-              )
-
-        });
-
-      }
-
-
-      window.showView(
-        "report"
-      );
-
-    };
-
-})();
+window.renderRepo =
+  renderRepo;
