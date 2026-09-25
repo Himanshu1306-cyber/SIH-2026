@@ -1,82 +1,25 @@
-# LabelGuard AI — Frontend Prototype
+# SIH-2026 — LabelGuard AI
 
-A multi-file frontend prototype for a Legal Metrology packaged
-commodity compliance workflow.
+Smart compliance engine for Legal Metrology Rules, 2011. Uses computer vision & OCR to analyze product packaging, detect missing/non-compliant declarations, check font readability, and generate reports for enforcement teams.
 
-## Run
+## Frontend Prototype
 
-Open `index.html` in a modern browser.
+A multi-file frontend prototype for a Legal Metrology packaged commodity compliance workflow.
 
-No build step is required.
+### Quick Start
 
-## Project Structure
+Open `index.html` in a modern browser. No build step required.
 
-- `index.html` — application shell and screens
-- `css/style.css` — main UI styles
-- `css/responsive.css` — responsive/mobile/print styles
+### Project Structure
 
-### JavaScript
-
-- `js/data.js`
-  - Dashboard demo data
-  - Repository demo data
-  - Role demo data
-
-- `js/rules.js`
-  - Prototype rule/check definitions
-
-- `js/dashboard.js`
-  - Dashboard rendering
-  - Statistics
-  - Charts
-  - Recent inspections
-
-- `js/scanner.js`
-  - Image upload
-  - Drag & drop
-  - Image preview
-  - Demo compliance analysis
-  - Compliance score
-  - Local inspection history
-
-- `js/report.js`
-  - Compliance report
-  - Rule findings
-  - Print / Save PDF
-  - Editable report export
-
-- `js/repository.js`
-  - Search
-  - Filters
-  - Inspection history
-  - Case opening
-
-- `js/app.js`
-  - Navigation
-  - Theme
-  - Mobile sidebar
-  - Toast notifications
-  - Application initialization
-
-### Assets
-
-- `assets/logo.svg`
-  - LabelGuard AI logo
-
-## Important
-
-This is a frontend prototype.
-
-The current scan workflow is a demo analysis and does not represent
-official OCR, computer vision or legal determination.
-
-For a production implementation, connect:
-
-1. OCR / computer-vision service
-2. Server-side rule engine
-3. Authoritative legal-rule dataset
-4. Database and inspection history API
-5. Real authentication and authorization
-6. Server-generated PDF
-7. Audit logging
-8. Evidence storage
+- `index.html` — Application shell and main views
+- `css/style.css` — Core design system & component styles
+- `css/responsive.css` — Mobile layout & print formatting
+- `js/app.js` — Navigation, theme & app initialization
+- `js/rules.js` — Legal Metrology rule/check definitions
+- `js/scanner.js` — Packaging scan simulation & compliance analysis
+- `js/report.js` — Report generator & PDF exporter
+- `js/repository.js` — Case inspection history & repository filters
+- `js/dashboard.js` — Compliance metrics & dashboard views
+- `js/data.js` — Prototype mock datasets
+- `assets/logo.svg` — LabelGuard AI brand logo
