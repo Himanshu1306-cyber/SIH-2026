@@ -10,17 +10,17 @@ frontend/
 ├── index.html
 
 ├── css/
-│ ├── style.css
-│ └── responsive.css
+│   ├── style.css
+│   └── responsive.css
 
 ├── js/
-│ ├── app.js
-│ ├── dashboard.js
-│ ├── data.js
-│ ├── report.js
-│ ├── repository.js
-│ ├── rules.js
-│ └── scanner.js
+│   ├── app.js
+│   ├── dashboard.js
+│   ├── data.js
+│   ├── report.js
+│   ├── repository.js
+│   ├── rules.js
+│   └── scanner.js
 
 └── readme.md
 
