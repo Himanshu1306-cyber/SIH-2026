@@ -39,7 +39,7 @@ function go(page) {
   };
 
   const titleEl = $('#pageTitle');
-  if (titleEl) titleEl.textContent = names[page] || 'LabelGuard AI';
+  if (titleEl) titleEl.textContent = names[page] || 'SCAN SETU AI';
 
   const eyebrow = $('#pageEyebrow');
   if (eyebrow) {
