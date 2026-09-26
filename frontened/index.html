@@ -395,6 +395,7 @@
 
     /* ========== 3. FILE PROCESSING ========== */
     function processFiles(fileList) {
+      console.log('[LabelGuard AI] Processing uploaded files:', fileList);
       if (!fileList || !fileList.length) return;
       _files = [];
       for (var i = 0; i < fileList.length && i < 4; i++) {
@@ -402,6 +403,7 @@
           _files.push(fileList[i]);
         }
       }
+      console.log('[LabelGuard AI] Valid images accepted:', _files.length);
       try { if (typeof state !== 'undefined') state.files = _files; } catch(e){}
 
       // Show thumbnails
@@ -428,6 +430,7 @@
 
     /* ========== 4. ANALYSIS ========== */
     function doAnalysis() {
+      console.log('[LabelGuard AI] Starting analysis on file(s)...');
       // Fallback: read fileInput directly if _files is empty
       var files = _files;
       if (!files || !files.length) {
@@ -452,12 +455,13 @@
 
       fetch(API_BASE + '/scan', { method:'POST', body:fd })
         .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
-        .then(function(rpt) { showResults(rpt, true); })
-        .catch(function() { showResults(demoReport(fname), false); });
+        .then(function(rpt) { console.log('[LabelGuard AI] Backend scan success:', rpt); showResults(rpt, true); })
+        .catch(function(err) { console.warn('[LabelGuard AI] Backend scan failed, using demo fallback:', err); showResults(demoReport(fname), false); });
     }
 
     /* ========== 5. SHOW RESULTS ========== */
     function showResults(report, real) {
+      console.log('[LabelGuard AI] Displaying results matrix:', report);
       try { if (typeof state!=='undefined') { state.lastReport=report; state.inspected=true; } } catch(e){}
 
       // Hide scan, show analysis — classList.remove('hidden') is REQUIRED because .hidden has !important
