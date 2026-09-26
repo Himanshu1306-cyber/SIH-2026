@@ -67,11 +67,20 @@ function toggleMobileSidebar() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Hide app shell initially, show auth
+  // Check if session exists BEFORE hiding app shell
+  const hasAuth = sessionStorage.getItem('labelguard_auth');
   const appShell = $('#appShell');
-  if (appShell) appShell.style.display = 'none';
+  const authPage = $('#page-auth');
 
-  // Initialize auth system (this will auto-restore session from sessionStorage)
+  if (!hasAuth && !state.user) {
+    if (appShell) appShell.style.display = 'none';
+    if (authPage) authPage.style.display = 'flex';
+  } else {
+    if (appShell) appShell.style.display = 'flex';
+    if (authPage) authPage.style.display = 'none';
+  }
+
+  // Initialize auth system (auto-restores session from sessionStorage)
   if (typeof initAuth === 'function') initAuth();
   if (typeof initAddInspectorForm === 'function') initAddInspectorForm();
 
@@ -80,10 +89,12 @@ document.addEventListener('DOMContentLoaded', () => {
   if (typeof initScanner === 'function') initScanner();
 
   // Restore page state from sessionStorage if logged in
-  if (state.user) {
+  if (state.user || hasAuth) {
     const savedPage = sessionStorage.getItem(PAGE_KEY);
     if (savedPage && savedPage !== 'auth') {
       go(savedPage);
+    } else {
+      go(state.user && state.user.role === 'admin' ? 'admin-overview' : 'scan');
     }
   }
 
