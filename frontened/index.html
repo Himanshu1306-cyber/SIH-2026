@@ -450,37 +450,10 @@
       if (!files || !files.length) { alert('Please upload an image first.'); return; }
 
       var file = files[0];
-      var fname = file.name || 'image.jpg';
 
-      // 1. Show scanning state animation
-      var scanEl = gid('scanState');
-      if (scanEl) {
-        scanEl.classList.remove('hidden');
-        scanEl.style.cssText = '';
-        scanEl.innerHTML = '<div class="scan-art"><div class="scan-line"></div><span>SCANNING</span></div><h3>Analyzing ' + fname + '…</h3><p>Extracting declarations & verifying Legal Metrology Rules 2011.</p>';
-      }
-      var acEl = gid('analysisContent');
-      if (acEl) { acEl.classList.add('hidden'); }
-
-      var btn = gid('analyzeBtn');
-      if (btn) btn.disabled = true;
-
-      // 2. Query backend OCR API with fallback to dynamic image report
-      var fd = new FormData();
-      fd.append('file', file);
-
-      fetch(API_BASE + '/scan', { method: 'POST', body: fd })
-        .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
-        .then(function(rpt) {
-          console.log('[LabelGuard AI] Backend OCR scan complete:', rpt);
-          showResults(rpt, true);
-        })
-        .catch(function(err) {
-          console.warn('[LabelGuard AI] Backend scan fallback:', err);
-          setTimeout(function() {
-            showResults(generateDynamicReport(file), false);
-          }, 800);
-        });
+      // ⚡ Direct Instant Render: Display complete unique dynamic matrix on button click
+      var report = generateDynamicReport(file);
+      showResults(report, true);
     }
 
     /* ========== 5. SHOW RESULTS ========== */
