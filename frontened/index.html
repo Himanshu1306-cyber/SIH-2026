@@ -434,8 +434,12 @@
       var btn = gid('analyzeBtn');
       if (btn) btn.disabled = (_files.length === 0);
 
-      if (_files.length > 0 && typeof showToast === 'function') {
-        showToast(_files.length + ' image(s) ready.', 'Uploaded');
+      if (_files.length > 0) {
+        if (typeof showToast === 'function') {
+          showToast(_files.length + ' image(s) ready.', 'Uploaded');
+        }
+        // Auto-trigger analysis immediately on upload
+        doAnalysis();
       }
     }
 
