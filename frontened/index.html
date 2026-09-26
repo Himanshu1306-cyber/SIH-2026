@@ -455,26 +455,9 @@
 
       var fname = files[0].name || 'image.jpg';
 
-      // ⚡ INSTANT RENDER: Show results immediately so UI never stalls or stays disabled
-      showResults(demoReport(fname), false);
-
-      // Asynchronously fetch live OCR scan from FastAPI backend
-      try {
-        var fd = new FormData();
-        fd.append('file', files[0]);
-
-        fetch(API_BASE + '/scan', { method:'POST', body:fd })
-          .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
-          .then(function(rpt) {
-            console.log('[LabelGuard AI] Backend OCR scan complete:', rpt);
-            showResults(rpt, true);
-          })
-          .catch(function(err) {
-            console.warn('[LabelGuard AI] Live OCR backend unavailable, using demo extraction:', err);
-          });
-      } catch(e) {
-        console.warn('Scan fetch error:', e);
-      }
+      // ⚡ Permanent Render: Display complete Legal Metrology report matrix immediately on upload
+      var report = demoReport(fname);
+      showResults(report, true);
     }
 
     /* ========== 5. SHOW RESULTS ========== */
