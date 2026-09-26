@@ -164,10 +164,10 @@
           <div class="inspection-layout">
             <section class="panel upload-panel">
               <div class="upload-top"><div><span class="section-kicker">SOURCE IMAGES</span><h3>Package photos</h3></div><span class="file-hint">JPG, PNG · up to 10 MB</span></div>
-              <div class="dropzone" id="dropzone">
-                <input type="file" id="fileInput" accept="image/png,image/jpeg" multiple hidden />
+              <input type="file" id="fileInput" accept="image/png,image/jpeg,image/webp" multiple hidden />
+              <label for="fileInput" class="dropzone" id="dropzone" style="cursor:pointer">
                 <div class="upload-glyph">⇧</div><h3>Drop package images here</h3><p>or <u>browse from device</u></p><small>Best results: straight-on, well-lit label photos</small>
-              </div>
+              </label>
               <div class="thumbs" id="thumbs"></div>
               <div class="source-tags"><span>Front panel</span><span>Back panel</span><span>Side panel</span><span>MRP area</span></div>
               <button type="button" class="btn primary full" id="analyzeBtn" disabled>Analyze package <span>→</span></button>
@@ -369,16 +369,13 @@
       dropzone.addEventListener('drop', function(e) { onDrag(e); dropzone.style.borderColor=''; dropzone.style.background=''; processFiles(e.dataTransfer.files); });
       dropzone.addEventListener('dragenter', function(e) { onDrag(e); });
 
-      // --- Click to browse (guard: skip if click came from fileInput itself) ---
-      dropzone.addEventListener('click', function(e) {
-        if (e.target === fileInput) return;
-        if (e.target.closest && e.target.closest('#analyzeBtn')) return;
-        fileInput.value = '';
-        fileInput.click();
-      });
-
-      // --- File selected ---
+      // --- File selection listener ---
+      // Note: <label for="fileInput"> natively opens file browser on click with user activation.
+      var _lastFileTime = 0;
       fileInput.addEventListener('change', function() {
+        var now = Date.now();
+        if (now - _lastFileTime < 300) return; // Prevent double trigger
+        _lastFileTime = now;
         processFiles(this.files);
       });
 
