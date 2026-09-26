@@ -412,46 +412,71 @@ function openProduct(
     </div>
 
 
-    <div
-      style="
-        display:flex;
-        justify-content:flex-end;
-        gap:8px;
-        margin-top:15px
-      "
-    >
-
-      <button
-        class="btn"
-        onclick="window.print()"
-      >
-        Print
-      </button>
-
-
-      <button
-        class="btn primary"
-        onclick="
-          showToast(
-            'Evidence review opened for ${product.id}.',
-            'Review started'
-          );
-          closeModal('detailModal')
-        "
-      >
-        Start review →
-      </button>
-
+    <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:8px; margin-top:20px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.08)">
+      <div style="display:flex; gap:8px;">
+        <button class="btn" style="background:#10b981; color:#fff; border:none; font-weight:600;" onclick="updateProductStatus(${index}, 'Compliant')">✓ Mark Compliant</button>
+        <button class="btn" style="background:#ef4444; color:#fff; border:none; font-weight:600;" onclick="updateProductStatus(${index}, 'Non-compliant')">✗ Mark Non-compliant</button>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn" onclick="window.print()">Print</button>
+        <button class="btn primary" onclick="toggleReviewForm(${index})">Start review →</button>
+      </div>
     </div>
-
+    <div id="reviewFormArea-${index}" style="display:none; margin-top:14px; padding:12px; background:rgba(255,255,255,0.03); border-radius:12px; border:1px solid rgba(255,255,255,0.08);">
+      <h4 style="margin:0 0 8px 0; font-size:14px;">Adjudicate Compliance Status</h4>
+      <div style="display:flex; gap:10px; margin-bottom:10px;">
+        <label style="cursor:pointer;"><input type="radio" name="revStatus-${index}" value="Compliant" checked> Compliant</label>
+        <label style="cursor:pointer;"><input type="radio" name="revStatus-${index}" value="Review needed"> Review needed</label>
+        <label style="cursor:pointer;"><input type="radio" name="revStatus-${index}" value="Non-compliant"> Non-compliant</label>
+      </div>
+      <button class="btn primary" style="width:100%;" onclick="submitReviewForm(${index})">Save Review & Update Status</button>
+    </div>
   `;
 
-
-  openModal(
-    "detailModal"
-  );
-
+  openModal("detailModal");
 }
+
+window.updateProductStatus = function(index, newStatus) {
+  if (typeof state !== 'undefined' && state.products && state.products[index]) {
+    var prod = state.products[index];
+    prod.status = newStatus;
+    if (newStatus === 'Compliant') prod.flags = 0;
+    
+    // Also update matching report in state.reports
+    if (state.reports) {
+      for (var r = 0; r < state.reports.length; r++) {
+        if (state.reports[r].id === prod.id || state.reports[r].title.indexOf(prod.name) !== -1) {
+          state.reports[r].status = newStatus;
+        }
+      }
+    }
+    
+    if (typeof showToast === 'function') {
+      showToast(prod.name + ' updated to ' + newStatus + '.', 'Status Updated');
+    }
+    closeModal('detailModal');
+    
+    // Re-render views
+    if (typeof renderRepo === 'function') renderRepo();
+    if (typeof renderReports === 'function') renderReports();
+    if (typeof renderRecent === 'function') renderRecent();
+    if (typeof setPageData === 'function') setPageData();
+  }
+};
+
+window.toggleReviewForm = function(index) {
+  var el = document.getElementById('reviewFormArea-' + index);
+  if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+};
+
+window.submitReviewForm = function(index) {
+  var radios = document.getElementsByName('revStatus-' + index);
+  var val = 'Compliant';
+  for (var i = 0; i < radios.length; i++) {
+    if (radios[i].checked) val = radios[i].value;
+  }
+  updateProductStatus(index, val);
+};
 
 
 function openModal(
