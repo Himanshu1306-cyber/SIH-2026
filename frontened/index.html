@@ -446,7 +446,6 @@
     /* ========== 4. ANALYSIS ========== */
     function doAnalysis() {
       console.log('[LabelGuard AI] Starting analysis on file(s)...');
-      // Fallback: read fileInput directly if _files is empty
       var files = _files;
       if (!files || !files.length) {
         var fi = gid('fileInput');
@@ -454,24 +453,28 @@
       }
       if (!files || !files.length) { alert('Please upload an image first.'); return; }
 
-      var btn = gid('analyzeBtn');
-      if (btn) btn.disabled = true;
-
-      // Show scanning animation
-      var scanEl = gid('scanState');
-      if (scanEl) { scanEl.classList.remove('hidden'); scanEl.style.cssText=''; scanEl.innerHTML='<div class="scan-art"><div class="scan-line"></div><span>SCANNING</span></div><h3>Analyzing…</h3><p>Running OCR + Legal Metrology checks.</p>'; }
-      var acEl = gid('analysisContent');
-      if (acEl) { acEl.classList.add('hidden'); }
-
-      // Try backend, fall back to demo
-      var fd = new FormData();
-      fd.append('file', files[0]);
       var fname = files[0].name || 'image.jpg';
 
-      fetch(API_BASE + '/scan', { method:'POST', body:fd })
-        .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
-        .then(function(rpt) { console.log('[LabelGuard AI] Backend scan success:', rpt); showResults(rpt, true); })
-        .catch(function(err) { console.warn('[LabelGuard AI] Backend scan failed, using demo fallback:', err); showResults(demoReport(fname), false); });
+      // ⚡ INSTANT RENDER: Show results immediately so UI never stalls or stays disabled
+      showResults(demoReport(fname), false);
+
+      // Asynchronously fetch live OCR scan from FastAPI backend
+      try {
+        var fd = new FormData();
+        fd.append('file', files[0]);
+
+        fetch(API_BASE + '/scan', { method:'POST', body:fd })
+          .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+          .then(function(rpt) {
+            console.log('[LabelGuard AI] Backend OCR scan complete:', rpt);
+            showResults(rpt, true);
+          })
+          .catch(function(err) {
+            console.warn('[LabelGuard AI] Live OCR backend unavailable, using demo extraction:', err);
+          });
+      } catch(e) {
+        console.warn('Scan fetch error:', e);
+      }
     }
 
     /* ========== 5. SHOW RESULTS ========== */

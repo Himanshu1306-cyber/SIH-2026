@@ -63,12 +63,12 @@ async def scan_package(file: UploadFile = File(...)):
     validate against Legal Metrology Rules 2011,
     and return a full compliance report.
     """
-    # Validate file type
-    allowed_types = ["image/jpeg", "image/png", "image/jpg"]
-    if file.content_type not in allowed_types:
+    # Validate file type (accept any image or common format)
+    content_type = (file.content_type or "").lower()
+    if not (content_type.startswith("image/") or content_type == "application/octet-stream"):
         raise HTTPException(
             status_code=400,
-            detail=f"Invalid file type: {file.content_type}. Only JPG/PNG images are accepted.",
+            detail=f"Invalid file type: {file.content_type}. Only image files are accepted.",
         )
 
     # Save uploaded file
