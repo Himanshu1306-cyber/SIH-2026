@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b1220" />
+  <title>LabelGuard AI — Legal Metrology Compliance</title>
+  <link rel="stylesheet" href="css/style.css?v=4" />
+  <link rel="stylesheet" href="css/responsive.css?v=4" />
+</head>
+<body>
+
+  <!-- ═══════════════════ AUTH LOGIN PAGE ═══════════════════ -->
+  <section class="auth-page" id="page-auth">
+    <div class="auth-bg"></div>
+    <div class="auth-card">
+      <div class="auth-logo">
+        <svg viewBox="0 0 48 48" fill="none" width="48" height="48">
+          <rect x="4" y="4" width="40" height="40" rx="12" fill="#6a68ff" opacity=".14"/>
+          <path d="M14 28.5L20.2 34.5L34.5 16" stroke="#6a68ff" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12 11H36" stroke="#6a68ff" stroke-width="2.6" stroke-linecap="round" opacity=".65"/>
+        </svg>
+        <div>
+          <div class="brand-name" style="color:#fff">LabelGuard <span>AI</span></div>
+          <div class="brand-sub">Legal Metrology Compliance</div>
+        </div>
+      </div>
+
+      <div class="auth-role-tabs">
+        <button class="auth-role-tab active" data-role="inspector">🔍 Inspector</button>
+        <button class="auth-role-tab" data-role="admin">🛡️ Admin</button>
+      </div>
+
+      <form id="loginForm" autocomplete="off">
+        <div class="auth-field">
+          <label for="loginEmail">Email address</label>
+          <input type="email" id="loginEmail" placeholder="you@labelguard.ai" required />
+        </div>
+        <div class="auth-field">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" placeholder="Enter your password" required />
+        </div>
+        <div class="auth-error" id="loginError"></div>
+        <button type="submit" class="btn primary full auth-submit">Sign in →</button>
+      </form>
+
+      <div class="auth-divider"><span>Quick demo access</span></div>
+      <div class="auth-quick">
+        <button class="btn ghost" id="quickInspector" type="button">Inspector Demo</button>
+        <button class="btn ghost" id="quickAdmin" type="button">Admin Demo</button>
+      </div>
+      <div class="auth-footer">Frontend demo · No real authentication</div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ APP SHELL ═══════════════════ -->
+  <div class="app-shell" id="appShell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="4" width="40" height="40" rx="12" fill="currentColor" opacity=".14"/>
+            <path d="M14 28.5L20.2 34.5L34.5 16" stroke="currentColor" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 11H36" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" opacity=".65"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-name">LabelGuard <span>AI</span></div>
+          <div class="brand-sub">Metrology Compliance</div>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Primary">
+        <!-- Inspector Nav -->
+        <button class="nav-item nav-inspector active" data-page="overview"><span class="nav-icon">⌂</span> Overview</button>
+        <button class="nav-item nav-inspector" data-page="inspection"><span class="nav-icon">⌕</span> New Inspection</button>
+        <button class="nav-item nav-inspector" data-page="repository"><span class="nav-icon">▣</span> Product Repository</button>
+        <button class="nav-item nav-inspector" data-page="reports"><span class="nav-icon">▤</span> Reports</button>
+        <button class="nav-item nav-inspector" data-page="rules"><span class="nav-icon">✓</span> Rule Engine</button>
+        <!-- Admin Nav -->
+        <button class="nav-item nav-admin" data-page="admin-overview" style="display:none"><span class="nav-icon">📊</span> Dashboard</button>
+        <button class="nav-item nav-admin" data-page="admin-inspectors" style="display:none"><span class="nav-icon">👥</span> Inspectors</button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="btn ghost full" id="logoutBtn" style="margin-bottom:10px;font-size:11px">⏻ Logout</button>
+        <div class="status-card">
+          <div class="status-dot"></div>
+          <div><strong>System healthy</strong><span>All modules operational</span></div>
+        </div>
+        <div class="mini-note">Demo build · Frontend only</div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="mobile-brand">
+          <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">☰</button>
+          <div class="brand-mark small"><svg viewBox="0 0 48 48" fill="none"><path d="M14 28.5L20.2 34.5L34.5 16" stroke="currentColor" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <strong>LabelGuard AI</strong>
+        </div>
+        <div class="topbar-left">
+          <div class="eyebrow" id="pageEyebrow">ENFORCEMENT CONSOLE</div>
+          <h1 id="pageTitle">Compliance Overview</h1>
+        </div>
+        <div class="topbar-actions">
+          <label class="global-search"><span>⌕</span><input id="globalSearch" placeholder="Search product, report or ID…" /></label>
+          <button class="icon-btn" title="Notifications" id="notifyBtn">◔<i></i></button>
+          <button class="profile" id="profileBtn"><span class="avatar">DR</span><span class="profile-copy"><strong>Demo Inspector</strong><small>Enforcement Officer</small></span><span class="chev">⌄</span></button>
+        </div>
+      </header>
+
+      <div class="content">
+
+        <!-- ═══ INSPECTOR: Overview ═══ -->
+        <section class="page active" id="page-overview">
+          <div class="hero">
+            <div>
+              <span class="pill accent">AI-ASSISTED INSPECTION</span>
+              <h2>Scan a package. <span>Spot compliance gaps.</span></h2>
+              <p>Upload packaging images or product listings and let the rule engine organize declarations, evidence and review status in one place.</p>
+              <div class="hero-actions">
+                <button class="btn primary" data-page="inspection">＋ Start New Inspection</button>
+                <button class="btn ghost" id="watchDemo">▷ View demo flow</button>
+              </div>
+            </div>
+            <div class="hero-orb" aria-hidden="true">
+              <div class="orb-ring r1"></div><div class="orb-ring r2"></div><div class="orb-ring r3"></div>
+              <div class="orb-center"><span>SCAN</span><strong>AI</strong></div>
+            </div>
+          </div>
+          <div class="stats-grid">
+            <article class="stat-card"><div class="stat-icon indigo">▣</div><div><span>Products scanned</span><strong id="statScanned">1,284</strong><small>+12.8% this month</small></div></article>
+            <article class="stat-card"><div class="stat-icon green">✓</div><div><span>Compliant</span><strong id="statCompliant">1,018</strong><small>79.3% of reviewed items</small></div></article>
+            <article class="stat-card"><div class="stat-icon red">!</div><div><span>Violations found</span><strong id="statViolations">266</strong><small>84 high-priority flags</small></div></article>
+            <article class="stat-card"><div class="stat-icon amber">◷</div><div><span>Pending review</span><strong id="statPending">37</strong><small>Needs inspector action</small></div></article>
+          </div>
+          <div class="grid-2-1">
+            <section class="panel">
+              <div class="panel-head"><div><span class="section-kicker">LIVE QUEUE</span><h3>Recent inspections</h3></div><button class="text-btn" data-page="repository">View all →</button></div>
+              <div class="table-wrap"><table><thead><tr><th>Product</th><th>Inspection ID</th><th>Status</th><th>Scanned</th><th></th></tr></thead><tbody id="recentTable"></tbody></table></div>
+            </section>
+            <section class="panel distribution-panel">
+              <div class="panel-head"><div><span class="section-kicker">PORTFOLIO</span><h3>Compliance mix</h3></div><span class="period">This month ▾</span></div>
+              <div class="distribution">
+                <div class="donut"><div><strong>79.3%</strong><span>Compliant</span></div></div>
+                <div class="legend"><div><span class="legend-dot ok"></span>Compliant <strong>1,018</strong></div><div><span class="legend-dot fail"></span>Non-compliant <strong>182</strong></div><div><span class="legend-dot review"></span>Review needed <strong>84</strong></div></div>
+              </div>
+              <div class="risk-line"><span>High-risk checks</span><strong>84</strong><span class="risk-track"><i style="width:31%"></i></span></div>
+            </section>
+          </div>
+          <section class="panel checks-panel">
+            <div class="panel-head"><div><span class="section-kicker">RULE COVERAGE</span><h3>Automated declaration checks</h3></div><button class="text-btn" data-page="rules">Open rule engine →</button></div>
+            <div class="check-grid" id="checkGrid"></div>
+          </section>
+        </section>
+
+        <!-- ═══ INSPECTOR: New Inspection ═══ -->
+        <section class="page" id="page-inspection">
+          <div class="inspection-header">
+            <div><span class="section-kicker">NEW INSPECTION</span><h2>Scan &amp; verify a packaged commodity</h2><p>Upload clear front/back/side photos, then review extracted declarations before generating the inspection report.</p></div>
+            <div class="stepper"><div class="step active"><b>1</b><span>Upload</span></div><div class="line"></div><div class="step"><b>2</b><span>Analyze</span></div><div class="line"></div><div class="step"><b>3</b><span>Review</span></div><div class="line"></div><div class="step"><b>4</b><span>Report</span></div></div>
+          </div>
+          <div class="inspection-layout">
+            <section class="panel upload-panel">
+              <div class="upload-top"><div><span class="section-kicker">SOURCE IMAGES</span><h3>Package photos</h3></div><span class="file-hint">JPG, PNG · up to 10 MB</span></div>
+              <div class="dropzone" id="dropzone">
+                <input type="file" id="fileInput" accept="image/png,image/jpeg" multiple hidden />
+                <div class="upload-glyph">⇧</div><h3>Drop package images here</h3><p>or <u>browse from device</u></p><small>Best results: straight-on, well-lit label photos</small>
+              </div>
+              <div class="thumbs" id="thumbs"></div>
+              <div class="source-tags"><span>Front panel</span><span>Back panel</span><span>Side panel</span><span>MRP area</span></div>
+              <button type="button" class="btn primary full" id="analyzeBtn" disabled>Analyze package <span>→</span></button>
+            </section>
+            <section class="panel analysis-panel">
+              <div class="upload-top"><div><span class="section-kicker">ANALYSIS PREVIEW</span><h3>Declaration matrix</h3></div><span class="confidence">AI confidence <strong>93%</strong></span></div>
+              <div class="scan-state" id="scanState">
+                <div class="scan-art"><div class="scan-line"></div><div class="scan-corner c1"></div><div class="scan-corner c2"></div><div class="scan-corner c3"></div><div class="scan-corner c4"></div><span>READY</span></div>
+                <h3>Awaiting package scan</h3><p>Upload at least one package image to start automated extraction.</p>
+              </div>
+              <div id="analysisContent" class="hidden">
+                <div class="product-strip"><div class="product-icon">PKG</div><div><strong id="productName">AquaPure Drinking Water</strong><span id="productMeta">Consumer commodity · Demo extraction</span></div><span class="status-badge warning" id="overallBadge">Review needed</span></div>
+                <div class="matrix" id="matrix"></div>
+                <div class="analysis-actions"><button type="button" class="btn ghost" id="addEvidence">＋ Attach evidence</button><button type="button" class="btn primary" id="generateReport">Generate report →</button></div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <!-- ═══ INSPECTOR: Product Repository ═══ -->
+        <section class="page" id="page-repository">
+          <div class="page-heading"><div><span class="section-kicker">PRODUCT REPOSITORY</span><h2>Scanned products &amp; inspection history</h2><p>Search every inspection, open evidence, and continue pending reviews.</p></div><button class="btn primary" data-page="inspection">＋ New inspection</button></div>
+          <section class="panel">
+            <div class="repo-toolbar"><label class="field-search"><span>⌕</span><input id="repoSearch" placeholder="Search by product, ID or category" /></label><select id="statusFilter"><option value="all">All statuses</option><option value="Compliant">Compliant</option><option value="Non-compliant">Non-compliant</option><option value="Review needed">Review needed</option></select><select id="categoryFilter"><option value="all">All categories</option><option value="Beverages">Beverages</option><option value="Grocery">Grocery</option><option value="Personal Care">Personal Care</option><option value="Household">Household</option></select></div>
+            <div class="table-wrap"><table class="repo-table"><thead><tr><th>Product</th><th>Category</th><th>Inspection ID</th><th>Compliance</th><th>Flags</th><th>Inspector</th><th>Updated</th><th></th></tr></thead><tbody id="repoTable"></tbody></table></div>
+          </section>
+        </section>
+
+        <!-- ═══ INSPECTOR: Reports ═══ -->
+        <section class="page" id="page-reports">
+          <div class="page-heading"><div><span class="section-kicker">REPORT CENTER</span><h2>Compliance reports</h2><p>Generate inspector-ready summaries with declarations, violations and evidence.</p></div><button class="btn primary" id="newReportBtn">＋ Generate report</button></div>
+          <div class="report-grid" id="reportGrid"></div>
+        </section>
+
+        <!-- ═══ INSPECTOR: Rule Engine ═══ -->
+        <section class="page" id="page-rules">
+          <div class="page-heading"><div><span class="section-kicker">RULE ENGINE</span><h2>Declaration checks</h2><p>Modular checks designed to map extracted package data to configured Legal Metrology validation rules.</p></div><span class="engine-status"><i></i> Engine v1.4 · Demo</span></div>
+          <div class="rule-layout">
+            <section class="panel rule-list" id="ruleList"></section>
+            <aside class="panel rule-detail"><span class="section-kicker">VALIDATION PIPELINE</span><h3>From pixels to compliance</h3><div class="pipeline"><div><b>01</b><span>Image intake</span><small>Quality + perspective check</small></div><div><b>02</b><span>OCR extraction</span><small>Text + numbers + symbols</small></div><div><b>03</b><span>Field normalization</span><small>Units, dates, currency</small></div><div><b>04</b><span>Rule validation</span><small>Completeness + format + placement</small></div><div><b>05</b><span>Evidence pack</span><small>Findings + images + report</small></div></div></aside>
+          </div>
+        </section>
+
+        <!-- ═══ ADMIN: Dashboard ═══ -->
+        <section class="page" id="page-admin-overview">
+          <div class="page-heading">
+            <div><span class="section-kicker">ADMIN DASHBOARD</span><h2>System Overview</h2><p>Monitor inspector activities, track violations, and manage the enforcement team.</p></div>
+          </div>
+          <div class="stats-grid" id="adminStatsGrid"></div>
+
+          <div class="grid-2-1" style="margin-top:15px">
+            <section class="panel">
+              <div class="panel-head"><div><span class="section-kicker">INSPECTOR PERFORMANCE</span><h3>Active inspectors</h3></div><button class="text-btn" data-page="admin-inspectors">Manage →</button></div>
+              <div id="inspectorPerfGrid" class="inspector-perf-list"></div>
+            </section>
+            <section class="panel">
+              <div class="panel-head"><div><span class="section-kicker">VIOLATION FEED</span><h3>Recent flags</h3></div></div>
+              <div id="violationFeed"></div>
+            </section>
+          </div>
+        </section>
+
+        <!-- ═══ ADMIN: Inspector Management ═══ -->
+        <section class="page" id="page-admin-inspectors">
+          <div class="page-heading">
+            <div><span class="section-kicker">INSPECTOR MANAGEMENT</span><h2>Enforcement Officers</h2><p>Add, view and manage registered inspectors and their credentials.</p></div>
+            <button class="btn primary" id="addInspectorBtn">＋ Add New Inspector</button>
+          </div>
+          <section class="panel">
+            <div class="table-wrap">
+              <table class="repo-table">
+                <thead><tr><th>Inspector</th><th>Phone</th><th>Address</th><th>Inspections</th><th>Flags</th><th>Status</th><th>Joined</th><th></th></tr></thead>
+                <tbody id="adminInspectorTable"></tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ═══════════════════ TOASTS & MODALS ═══════════════════ -->
+  <div class="toast" id="toast"><span>✓</span><div><strong>Done</strong><small id="toastText">Action completed.</small></div></div>
+
+  <div class="modal-backdrop" id="detailModal" aria-hidden="true">
+    <div class="modal"><button class="modal-close" data-close="detailModal">×</button><div id="modalBody"></div></div>
+  </div>
+
+  <div class="modal-backdrop" id="demoModal" aria-hidden="true">
+    <div class="modal demo-modal"><button class="modal-close" data-close="demoModal">×</button><span class="section-kicker">DEMO FLOW</span><h2>See the inspection journey</h2><div class="demo-track"><div><b>1</b><strong>Upload</strong><span>Label images</span></div><div><b>2</b><strong>Extract</strong><span>Declarations</span></div><div><b>3</b><strong>Validate</strong><span>Rule checks</span></div><div><b>4</b><strong>Report</strong><span>Evidence pack</span></div></div><button class="btn primary" data-close="demoModal" data-page="inspection">Start the demo →</button></div>
+  </div>
+
+  <!-- ═══ Add Inspector Modal ═══ -->
+  <div class="modal-backdrop" id="addInspectorModal" aria-hidden="true">
+    <div class="modal">
+      <button class="modal-close" data-close="addInspectorModal">×</button>
+      <span class="section-kicker">NEW INSPECTOR</span>
+      <h2 style="margin:5px 0 18px">Add Enforcement Officer</h2>
+      <form id="addInspectorForm">
+        <div class="form-grid">
+          <div class="auth-field"><label for="inspectorName">Full Name</label><input type="text" id="inspectorName" placeholder="e.g. Rahul Sharma" required /></div>
+          <div class="auth-field"><label for="inspectorPhone">Phone Number</label><input type="tel" id="inspectorPhone" placeholder="e.g. 9876543210" required /></div>
+          <div class="auth-field full-width"><label for="inspectorAddress">Address</label><input type="text" id="inspectorAddress" placeholder="e.g. Delhi, India" required /></div>
+          <div class="auth-field"><label for="inspectorEmail">Email ID</label><input type="email" id="inspectorEmail" placeholder="e.g. rahul@labelguard.ai" required /></div>
+          <div class="auth-field"><label for="inspectorPassword">Password</label><input type="password" id="inspectorPassword" placeholder="Set a password" required /></div>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:18px">
+          <button type="button" class="btn" data-close="addInspectorModal">Cancel</button>
+          <button type="submit" class="btn primary">Add Inspector →</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- External Modular Scripts -->
+  <script src="js/data.js?v=6"></script>
+  <script src="js/auth.js?v=6"></script>
+  <script src="js/admin.js?v=6"></script>
+  <script src="js/dashboard.js?v=6"></script>
+  <script src="js/repository.js?v=6"></script>
+  <script src="js/report.js?v=6"></script>
+  <script src="js/rules.js?v=6"></script>
+  <script src="js/app.js?v=6"></script>
+
+  <script>
+  /* ============================================================
+     LABELGUARD — MASTER INLINE CONTROLLER
+     All critical code runs here. Zero dependency on external files.
+     ============================================================ */
+  (function() {
+    var AUTH_KEY  = 'labelguard_auth';
+    var PAGE_KEY  = 'labelguard_page';
+    var API_BASE  = 'http://localhost:8000';
+    var _files    = [];
+
+    /* --- helpers --- */
+    function gid(id) { return document.getElementById(id); }
+    function qs(sel)  { return document.querySelector(sel); }
+    function qsa(sel) { return document.querySelectorAll(sel); }
+
+    /* --- global error catcher --- */
+    window.onerror = function(msg, src, ln) {
+      var b = gid('__errBanner');
+      if (!b) { b = document.createElement('div'); b.id='__errBanner'; b.style.cssText='position:fixed;top:0;left:0;right:0;z-index:99999;background:#e24d62;color:#fff;padding:8px 14px;font:12px monospace'; document.body.appendChild(b); }
+      b.textContent = 'ERR: ' + msg + ' (' + (src||'').split('/').pop() + ':' + ln + ')';
+    };
+
+    /* ========== 1. SESSION RESTORE (runs immediately) ========== */
+    try {
+      var saved = sessionStorage.getItem(AUTH_KEY);
+      if (saved) {
+        var sess = JSON.parse(saved);
+        if (sess && sess.role && sess.email) {
+          // Restore state
+          if (typeof state !== 'undefined') {
+            state.user = { role: sess.role, name: sess.name, email: sess.email };
+          }
+          // Hide auth, show app
+          var authEl = gid('page-auth');
+          var appEl  = gid('appShell');
+          if (authEl) authEl.style.display = 'none';
+          if (appEl)  appEl.style.display  = 'flex';
+
+          // Update profile
+          var av = qs('.avatar');
+          if (av) av.textContent = (sess.name||'').split(' ').map(function(w){return w[0]}).join('').slice(0,2).toUpperCase();
+          var pn = qs('.profile-copy strong');
+          if (pn) pn.textContent = sess.name;
+          var pr = qs('.profile-copy small');
+          if (pr) pr.textContent = sess.role === 'admin' ? 'System Administrator' : 'Enforcement Officer';
+
+          // Show/hide nav
+          var inspItems = qsa('.nav-inspector');
+          var adminItems = qsa('.nav-admin');
+          for (var ni=0; ni<inspItems.length; ni++) inspItems[ni].style.display = sess.role==='inspector' ? '' : 'none';
+          for (var ai=0; ai<adminItems.length; ai++) adminItems[ai].style.display = sess.role==='admin' ? '' : 'none';
+
+          // Restore page
+          var savedPage = sessionStorage.getItem(PAGE_KEY);
+          if (savedPage && savedPage !== 'auth' && typeof go === 'function') {
+            go(savedPage);
+          }
+        }
+      }
+    } catch(e) { console.error('Session restore error:', e); }
+
+    /* ========== 2. SCANNER SETUP (after DOM ready) ========== */
+    function setupScanner() {
+      var dropzone  = gid('dropzone');
+      var fileInput = gid('fileInput');
+      var analyzeBtn = gid('analyzeBtn');
+      if (!dropzone || !fileInput) return;
+
+      // --- Drag and drop ---
+      function onDrag(e) { e.preventDefault(); e.stopPropagation(); }
+      dropzone.addEventListener('dragover', function(e) { onDrag(e); dropzone.style.borderColor='#6b69ee'; dropzone.style.background='#f7f7ff'; });
+      dropzone.addEventListener('dragleave', function(e) { onDrag(e); dropzone.style.borderColor=''; dropzone.style.background=''; });
+      dropzone.addEventListener('drop', function(e) { onDrag(e); dropzone.style.borderColor=''; dropzone.style.background=''; processFiles(e.dataTransfer.files); });
+      dropzone.addEventListener('dragenter', function(e) { onDrag(e); });
+
+      // --- Click to browse (guard: skip if click came from fileInput itself) ---
+      dropzone.addEventListener('click', function(e) {
+        if (e.target === fileInput) return;
+        if (e.target.closest && e.target.closest('#analyzeBtn')) return;
+        fileInput.value = '';
+        fileInput.click();
+      });
+
+      // --- File selected ---
+      fileInput.addEventListener('change', function() {
+        processFiles(this.files);
+      });
+
+      // --- Analyze button ---
+      if (analyzeBtn) {
+        analyzeBtn.onclick = function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          doAnalysis();
+          return false;
+        };
+      }
+    }
+
+    /* ========== 3. FILE PROCESSING ========== */
+    function processFiles(fileList) {
+      if (!fileList || !fileList.length) return;
+      _files = [];
+      for (var i = 0; i < fileList.length && i < 4; i++) {
+        if (/image\/(png|jpeg|jpg|webp)/.test(fileList[i].type)) {
+          _files.push(fileList[i]);
+        }
+      }
+      try { if (typeof state !== 'undefined') state.files = _files; } catch(e){}
+
+      // Show thumbnails
+      var thumbs = gid('thumbs');
+      if (thumbs) {
+        thumbs.innerHTML = '';
+        for (var j = 0; j < _files.length; j++) {
+          var u = URL.createObjectURL(_files[j]);
+          var el = document.createElement('div');
+          el.className = 'thumb';
+          el.innerHTML = '<img src="'+u+'" alt=""><span>✓</span>';
+          thumbs.appendChild(el);
+        }
+      }
+
+      // Enable analyze button
+      var btn = gid('analyzeBtn');
+      if (btn) btn.disabled = (_files.length === 0);
+
+      if (_files.length > 0 && typeof showToast === 'function') {
+        showToast(_files.length + ' image(s) ready.', 'Uploaded');
+      }
+    }
+
+    /* ========== 4. ANALYSIS ========== */
+    function doAnalysis() {
+      // Fallback: read fileInput directly if _files is empty
+      var files = _files;
+      if (!files || !files.length) {
+        var fi = gid('fileInput');
+        if (fi && fi.files && fi.files.length) { files = Array.prototype.slice.call(fi.files); _files = files; }
+      }
+      if (!files || !files.length) { alert('Please upload an image first.'); return; }
+
+      var btn = gid('analyzeBtn');
+      if (btn) btn.disabled = true;
+
+      // Show scanning animation
+      var scanEl = gid('scanState');
+      if (scanEl) { scanEl.classList.remove('hidden'); scanEl.style.cssText=''; scanEl.innerHTML='<div class="scan-art"><div class="scan-line"></div><span>SCANNING</span></div><h3>Analyzing…</h3><p>Running OCR + Legal Metrology checks.</p>'; }
+      var acEl = gid('analysisContent');
+      if (acEl) { acEl.classList.add('hidden'); }
+
+      // Try backend, fall back to demo
+      var fd = new FormData();
+      fd.append('file', files[0]);
+      var fname = files[0].name || 'image.jpg';
+
+      fetch(API_BASE + '/scan', { method:'POST', body:fd })
+        .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then(function(rpt) { showResults(rpt, true); })
+        .catch(function() { showResults(demoReport(fname), false); });
+    }
+
+    /* ========== 5. SHOW RESULTS ========== */
+    function showResults(report, real) {
+      try { if (typeof state!=='undefined') { state.lastReport=report; state.inspected=true; } } catch(e){}
+
+      // Hide scan, show analysis — classList.remove('hidden') is REQUIRED because .hidden has !important
+      var scanEl = gid('scanState');
+      if (scanEl) { scanEl.classList.add('hidden'); scanEl.style.display = 'none'; }
+      var acEl = gid('analysisContent');
+      if (acEl) { acEl.className = ''; acEl.style.display = 'block'; }
+
+      // Stepper
+      try {
+        var steps = qsa('.stepper .step');
+        for (var s=0;s<steps.length;s++) steps[s].classList.toggle('active', s<=2);
+      } catch(e){}
+
+      // Product strip
+      var pName = (report.extracted_fields && report.extracted_fields.product_name) || report.source_file || 'Scanned Product';
+      var e1 = gid('productName'); if (e1) e1.textContent = pName;
+      var e2 = gid('productMeta'); if (e2) e2.textContent = (report.source_file||'Image') + ' · ' + report.compliance_percentage + '% compliance' + (real?'':' (demo)');
+
+      // Badge
+      var bdg = gid('overallBadge');
+      if (bdg) { bdg.textContent = report.overall_status; bdg.className = 'status-badge ' + (report.overall_status==='Compliant'?'ok':report.overall_status==='Non-compliant'?'fail':'warning'); }
+
+      // Declaration matrix
+      var mx = gid('matrix');
+      if (mx && report.rule_results) {
+        var h = '';
+        for (var j=0; j<report.rule_results.length; j++) {
+          var r = report.rule_results[j];
+          var cls = r.status==='pass' ? 'ok' : 'fail';
+          var lbl = r.status==='pass' ? 'Pass' : 'Fail';
+          h += '<div class="matrix-row"><div class="label">'+r.rule_id+' · '+r.rule_name+'</div><div class="value">'+r.extracted_value+'</div><span class="matrix-check '+cls+'">'+lbl+'</span></div>';
+        }
+        var pc = report.compliance_percentage>=90?'ok':report.compliance_percentage>=60?'warn':'fail';
+        h += '<div class="matrix-row" style="background:#f8f9fc;font-weight:700"><div class="label">OVERALL COMPLIANCE</div><div class="value">'+report.rules_passed+'/'+report.total_rules+' rules passed</div><span class="matrix-check '+pc+'">'+report.compliance_percentage+'%</span></div>';
+        mx.innerHTML = h;
+      }
+
+      // Save to state
+      try {
+        if (typeof state !== 'undefined') {
+          var now = new Date();
+          var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+          var ds = now.getDate()+' '+months[now.getMonth()]+' '+now.getFullYear();
+          var ins = (state.user && state.user.name) || 'Inspector';
+          state.products.unshift({ name:pName, category:'Scanned', id:report.report_id||'LM-SCAN', status:report.overall_status, flags:report.rules_failed||0, inspector:ins, updated:ds, net:(report.extracted_fields&&report.extracted_fields.net_quantity)||'—', mrp:(report.extracted_fields&&report.extracted_fields.mrp)||'—', image:null });
+          state.reports.unshift({ title:pName+' — Inspection Report', id:report.report_id||'REP-SCAN', status:'Final', meta:(report.total_rules||9)+' declarations · '+(report.rules_failed||0)+' flags', date:ds });
+          try { if (typeof renderRepo==='function') renderRepo(); } catch(e){}
+          try { if (typeof renderReports==='function') renderReports(); } catch(e){}
+          try { if (typeof renderRecent==='function') renderRecent(); } catch(e){}
+        }
+      } catch(e){}
+
+      var btn = gid('analyzeBtn'); if (btn) btn.disabled = false;
+      if (typeof showToast==='function') showToast('Scan complete — '+report.compliance_percentage+'% compliance.', real?'OCR Analysis':'Demo Analysis');
+    }
+
+    /* ========== 6. DEMO REPORT ========== */
+    function demoReport(fn) {
+      var n = new Date();
+      return {
+        report_id:'REP-'+n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+String(n.getDate()).padStart(2,'0')+String(n.getHours()).padStart(2,'0')+String(n.getMinutes()).padStart(2,'0'),
+        generated_at:n.toISOString(), source_file:fn, overall_status:'Review needed',
+        compliance_percentage:77.8, total_rules:9, rules_passed:7, rules_failed:2,
+        extracted_fields:{ manufacturer:'AquaPure Foods Pvt. Ltd., Patna, Bihar', product_name:'AquaPure Drinking Water', net_quantity:'1 L', mrp:'₹20.00', dates:'Mfg: 08/2026', consumer_care:'Phone: 1800-000-2026', country_of_origin:'India', fssai:'Not detected', batch_number:'Not detected' },
+        rule_results:[
+          {rule_id:'R1',rule_name:'Manufacturer / Packer',status:'pass',extracted_value:'AquaPure Foods Pvt. Ltd., Patna, Bihar'},
+          {rule_id:'R2',rule_name:'Product Name',status:'pass',extracted_value:'AquaPure Drinking Water'},
+          {rule_id:'R3',rule_name:'Net Quantity',status:'pass',extracted_value:'1 L'},
+          {rule_id:'R4',rule_name:'MRP',status:'pass',extracted_value:'₹20.00'},
+          {rule_id:'R5',rule_name:'Mfg / Pkg Date',status:'pass',extracted_value:'08/2026'},
+          {rule_id:'R6',rule_name:'Consumer Care',status:'pass',extracted_value:'1800-000-2026'},
+          {rule_id:'R7',rule_name:'Country of Origin',status:'pass',extracted_value:'India'},
+          {rule_id:'R8',rule_name:'FSSAI License',status:'fail',extracted_value:'Not detected'},
+          {rule_id:'R9',rule_name:'Batch Number',status:'fail',extracted_value:'Not detected'}
+        ]
+      };
+    }
+
+    /* ========== 7. BOOT ========== */
+    // Override initScanner globally so app.js uses our version
+    window.initScanner = setupScanner;
+
+    // Also run setup now if DOM is already ready
+    if (document.readyState !== 'loading') {
+      setupScanner();
+    } else {
+      document.addEventListener('DOMContentLoaded', setupScanner);
+    }
+  })();
+  </script>
+
+</body>
+</html>

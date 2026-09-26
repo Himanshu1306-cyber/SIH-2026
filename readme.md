@@ -1,25 +1,61 @@
-# SIH-2026 — LabelGuard AI
+# SCAN SETU — Metrology Compliance Frontend
 
-Smart compliance engine for Legal Metrology Rules, 2011. Uses computer vision & OCR to analyze product packaging, detect missing/non-compliant declarations, check font readability, and generate reports for enforcement teams.
+This project is a frontend prototype for a packaged commodity
+Legal Metrology compliance checking system.
 
-## Frontend Prototype
+## Project Structure
 
-A multi-file frontend prototype for a Legal Metrology packaged commodity compliance workflow.
+SCAN_SETU_Frontend/
 
-### Quick Start
+├── index.html
 
-Open `index.html` in a modern browser. No build step required.
+├── assets/
+│ └── logo.svg
 
-### Project Structure
+├── css/
+│ └── style.css
 
-- `index.html` — Application shell and main views
-- `css/style.css` — Core design system & component styles
-- `css/responsive.css` — Mobile layout & print formatting
-- `js/app.js` — Navigation, theme & app initialization
-- `js/rules.js` — Legal Metrology rule/check definitions
-- `js/scanner.js` — Packaging scan simulation & compliance analysis
-- `js/report.js` — Report generator & PDF exporter
-- `js/repository.js` — Case inspection history & repository filters
-- `js/dashboard.js` — Compliance metrics & dashboard views
-- `js/data.js` — Prototype mock datasets
-- `assets/logo.svg` — LabelGuard AI brand logo
+├── js/
+│ └── app.js
+
+└── README.md
+
+## Main Modules
+
+1. Compliance Overview
+2. New Inspection
+3. Product Repository
+4. Reports
+5. Rule Engine
+
+## Inspection Flow
+
+Upload Package Image
+↓
+Image Preview
+↓
+Demo Analysis
+↓
+Declaration Matrix
+↓
+Compliance Review
+↓
+Report Generation
+
+## Branding
+
+Project Name:
+
+SCAN SETU
+
+Subtitle:
+
+Metrology Compliance
+
+## Important
+
+This is a frontend prototype.
+
+Actual OCR, computer vision, backend rule validation,
+authentication, database storage and official report generation
+must be connected to backend services for production use.
