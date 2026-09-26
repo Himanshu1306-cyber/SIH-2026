@@ -5,6 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#0b1220" />
   <title>LabelGuard AI — Legal Metrology Compliance</title>
+  <script>
+    // Silence browser extension noise (e.g. MetaMask / contentscript.js) in developer console
+    (function() {
+      var _origWarn = console.warn;
+      var _origErr = console.error;
+      var _origLog = console.log;
+      function isNoise(args) {
+        var str = Array.prototype.slice.call(args).join(' ');
+        return /contentscript|ObjectMultiplex|EventEmitter|app-init-liveness|background-liveness/i.test(str);
+      }
+      console.warn = function() { if (!isNoise(arguments)) _origWarn.apply(console, arguments); };
+      console.error = function() { if (!isNoise(arguments)) _origErr.apply(console, arguments); };
+    })();
+  </script>
   <link rel="stylesheet" href="css/style.css?v=4" />
   <link rel="stylesheet" href="css/responsive.css?v=4" />
 </head>
