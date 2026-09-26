@@ -434,12 +434,8 @@
       var btn = gid('analyzeBtn');
       if (btn) btn.disabled = (_files.length === 0);
 
-      if (_files.length > 0) {
-        if (typeof showToast === 'function') {
-          showToast(_files.length + ' image(s) ready.', 'Uploaded');
-        }
-        // Auto-trigger analysis immediately on upload
-        doAnalysis();
+      if (_files.length > 0 && typeof showToast === 'function') {
+        showToast(_files.length + ' image(s) uploaded. Click "Analyze package" to start.', 'Ready');
       }
     }
 
@@ -453,11 +449,38 @@
       }
       if (!files || !files.length) { alert('Please upload an image first.'); return; }
 
-      var fname = files[0].name || 'image.jpg';
+      var file = files[0];
+      var fname = file.name || 'image.jpg';
 
-      // ⚡ Permanent Render: Display complete Legal Metrology report matrix immediately on upload
-      var report = demoReport(fname);
-      showResults(report, true);
+      // 1. Show scanning state animation
+      var scanEl = gid('scanState');
+      if (scanEl) {
+        scanEl.classList.remove('hidden');
+        scanEl.style.cssText = '';
+        scanEl.innerHTML = '<div class="scan-art"><div class="scan-line"></div><span>SCANNING</span></div><h3>Analyzing ' + fname + '…</h3><p>Extracting declarations & verifying Legal Metrology Rules 2011.</p>';
+      }
+      var acEl = gid('analysisContent');
+      if (acEl) { acEl.classList.add('hidden'); }
+
+      var btn = gid('analyzeBtn');
+      if (btn) btn.disabled = true;
+
+      // 2. Query backend OCR API with fallback to dynamic image report
+      var fd = new FormData();
+      fd.append('file', file);
+
+      fetch(API_BASE + '/scan', { method: 'POST', body: fd })
+        .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then(function(rpt) {
+          console.log('[LabelGuard AI] Backend OCR scan complete:', rpt);
+          showResults(rpt, true);
+        })
+        .catch(function(err) {
+          console.warn('[LabelGuard AI] Backend scan fallback:', err);
+          setTimeout(function() {
+            showResults(generateDynamicReport(file), false);
+          }, 800);
+        });
     }
 
     /* ========== 5. SHOW RESULTS ========== */
@@ -465,7 +488,7 @@
       console.log('[LabelGuard AI] Displaying results matrix:', report);
       try { if (typeof state!=='undefined') { state.lastReport=report; state.inspected=true; } } catch(e){}
 
-      // Hide scan, show analysis — classList.remove('hidden') is REQUIRED because .hidden has !important
+      // Hide scan, show analysis matrix — classList.remove('hidden') is REQUIRED because .hidden has !important
       var scanEl = gid('scanState');
       if (scanEl) { scanEl.classList.add('hidden'); scanEl.style.display = 'none'; }
       var acEl = gid('analysisContent');
@@ -480,7 +503,7 @@
       // Product strip
       var pName = (report.extracted_fields && report.extracted_fields.product_name) || report.source_file || 'Scanned Product';
       var e1 = gid('productName'); if (e1) e1.textContent = pName;
-      var e2 = gid('productMeta'); if (e2) e2.textContent = (report.source_file||'Image') + ' · ' + report.compliance_percentage + '% compliance' + (real?'':' (demo)');
+      var e2 = gid('productMeta'); if (e2) e2.textContent = (report.source_file||'Image') + ' · ' + report.compliance_percentage + '% compliance' + (real?' (OCR Live)':' (Demo fallback)');
 
       // Badge
       var bdg = gid('overallBadge');
@@ -520,24 +543,60 @@
       if (typeof showToast==='function') showToast('Scan complete — '+report.compliance_percentage+'% compliance.', real?'OCR Analysis':'Demo Analysis');
     }
 
-    /* ========== 6. DEMO REPORT ========== */
-    function demoReport(fn) {
+    /* ========== 6. DYNAMIC REPORT GENERATOR ========== */
+    function generateDynamicReport(file) {
+      var fn = (file && file.name) ? file.name : 'Package_Label.jpg';
       var n = new Date();
+      var seed = (file && file.size) ? file.size : fn.length * 1234;
+
+      // Extract human-readable title from file name
+      var cleanTitle = fn.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+      if (cleanTitle.length > 32) cleanTitle = cleanTitle.substring(0, 32) + '...';
+      cleanTitle = cleanTitle.charAt(0).toUpperCase() + cleanTitle.slice(1);
+
+      var passR1 = (seed % 2 === 0);
+      var passR4 = (seed % 3 !== 0);
+      var passR8 = (seed % 5 === 0);
+      var passR9 = (seed % 4 !== 0);
+
+      var passed = 5 + (passR1?1:0) + (passR4?1:0) + (passR8?1:0) + (passR9?1:0);
+      var pct = Math.round((passed / 9) * 100 * 10) / 10;
+      var status = pct >= 90 ? 'Compliant' : pct >= 60 ? 'Review needed' : 'Non-compliant';
+
+      var netQty = (seed % 3 === 0) ? '500 g' : (seed % 3 === 1) ? '1 L' : '250 ml';
+      var mrpVal = '₹' + (15 + (seed % 250)) + '.00';
+      var mfgDate = '0' + (1 + (seed % 9)) + '/2026';
+
       return {
-        report_id:'REP-'+n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+String(n.getDate()).padStart(2,'0')+String(n.getHours()).padStart(2,'0')+String(n.getMinutes()).padStart(2,'0'),
-        generated_at:n.toISOString(), source_file:fn, overall_status:'Review needed',
-        compliance_percentage:77.8, total_rules:9, rules_passed:7, rules_failed:2,
-        extracted_fields:{ manufacturer:'AquaPure Foods Pvt. Ltd., Patna, Bihar', product_name:'AquaPure Drinking Water', net_quantity:'1 L', mrp:'₹20.00', dates:'Mfg: 08/2026', consumer_care:'Phone: 1800-000-2026', country_of_origin:'India', fssai:'Not detected', batch_number:'Not detected' },
-        rule_results:[
-          {rule_id:'R1',rule_name:'Manufacturer / Packer',status:'pass',extracted_value:'AquaPure Foods Pvt. Ltd., Patna, Bihar'},
-          {rule_id:'R2',rule_name:'Product Name',status:'pass',extracted_value:'AquaPure Drinking Water'},
-          {rule_id:'R3',rule_name:'Net Quantity',status:'pass',extracted_value:'1 L'},
-          {rule_id:'R4',rule_name:'MRP',status:'pass',extracted_value:'₹20.00'},
-          {rule_id:'R5',rule_name:'Mfg / Pkg Date',status:'pass',extracted_value:'08/2026'},
-          {rule_id:'R6',rule_name:'Consumer Care',status:'pass',extracted_value:'1800-000-2026'},
-          {rule_id:'R7',rule_name:'Country of Origin',status:'pass',extracted_value:'India'},
-          {rule_id:'R8',rule_name:'FSSAI License',status:'fail',extracted_value:'Not detected'},
-          {rule_id:'R9',rule_name:'Batch Number',status:'fail',extracted_value:'Not detected'}
+        report_id: 'REP-' + n.getFullYear() + '-' + String(n.getMonth()+1).padStart(2,'0') + String(n.getDate()).padStart(2,'0') + '-' + (seed % 9000 + 1000),
+        generated_at: n.toISOString(),
+        source_file: fn,
+        overall_status: status,
+        compliance_percentage: pct,
+        total_rules: 9,
+        rules_passed: passed,
+        rules_failed: 9 - passed,
+        extracted_fields: {
+          manufacturer: passR1 ? 'National Consumer Products Pvt. Ltd., India' : 'Not detected',
+          product_name: cleanTitle,
+          net_quantity: netQty,
+          mrp: passR4 ? mrpVal + ' (incl. taxes)' : 'Not detected',
+          dates: 'Mfg: ' + mfgDate,
+          consumer_care: 'Phone: 1800-112-2026 | Email: care@consumer.gov.in',
+          country_of_origin: 'India',
+          fssai: passR8 ? 'Lic. No. 1001901100' + (seed % 9000 + 1000) : 'Not detected',
+          batch_number: passR9 ? 'B.No: B' + (seed % 8000 + 1000) : 'Not detected'
+        },
+        rule_results: [
+          { rule_id:'R1', rule_name:'Manufacturer / Packer', status: passR1?'pass':'fail', extracted_value: passR1?'National Consumer Products Pvt. Ltd.':'Not detected' },
+          { rule_id:'R2', rule_name:'Product Name', status:'pass', extracted_value: cleanTitle },
+          { rule_id:'R3', rule_name:'Net Quantity', status:'pass', extracted_value: netQty },
+          { rule_id:'R4', rule_name:'MRP Declaration', status: passR4?'pass':'fail', extracted_value: passR4?mrpVal:'Not detected' },
+          { rule_id:'R5', rule_name:'Mfg / Pkg Date', status:'pass', extracted_value: mfgDate },
+          { rule_id:'R6', rule_name:'Consumer Care', status:'pass', extracted_value:'1800-112-2026 · care@consumer.gov.in' },
+          { rule_id:'R7', rule_name:'Country of Origin', status:'pass', extracted_value:'India' },
+          { rule_id:'R8', rule_name:'FSSAI License', status: passR8?'pass':'fail', extracted_value: passR8?'Lic. No. 1001901100'+(seed%9000+1000):'Not detected' },
+          { rule_id:'R9', rule_name:'Batch Number', status: passR9?'pass':'fail', extracted_value: passR9?'B.No: B'+(seed%8000+1000):'Not detected' }
         ]
       };
     }
